@@ -1,4 +1,4 @@
-952760d676d1a4c25e134b7557855289 *DESCRIPTION
+7c2237ff007690528b1254482f936d17 *DESCRIPTION
 1dae9470b528d4811fae7f188cd89d4c *NAMESPACE
 0e2ef3351b878ce2e3221706fa3fcbb5 *R/CalcLikelihood.R
 f3e78ae003b175ae4aa6489b7ce2dd10 *R/CalcTopicModelR2.R
@@ -47,11 +47,11 @@ fee2eeee8d698b21c3b98479001bddab *man/LabelTopics.Rd
 7a0c8a0c323037c1806b88696935e1c3 *man/TmParallelApply.Rd
 5094c95ff10000a49a8d88de2667a703 *man/Vec2Dtm.Rd
 1a22df884c8880108a778ec45a546b0c *man/acq2.Rd
-27daaa122f5de444a3e6b253ffda4639 *src/CalcLikelihoodC.cpp
-ec1d2b2338c53f3e0a44bd2cce77cd5b *src/CalcSumSquares.cpp
+63d0e2a3f2558d61e87591c938ae819b *src/CalcLikelihoodC.cpp
+a2d6e407e48344cf12d30319dbdd6b0b *src/CalcSumSquares.cpp
 5ad4c93771af0809086c5febe4d6e0bf *src/Dtm2DocsC.cpp
-0d3f6394ff91beb62eabe103c8632695 *src/HellingerMat.cpp
-91ffc1074607d95c852ff59212ff8bdb *src/Hellinger_cpp.cpp
-eac0fcf57f9e433a542713be3e0ea319 *src/JSD_cpp.cpp
-fb5d959d6d6514e11eb1592ae178983a *src/JSDmat.cpp
+7e3c673f47687caeaeda1dd9d11c01e6 *src/HellingerMat.cpp
+e6e9ed599795975b67e2bb08bd887710 *src/Hellinger_cpp.cpp
+08894a882456304490a6a1c5cdfd5ed1 *src/JSD_cpp.cpp
+207c38ecff31c0b444e42ec867a7260f *src/JSDmat.cpp
 9a373d2547dd3d1cbac8fd3046130ef1 *src/RcppExports.cpp

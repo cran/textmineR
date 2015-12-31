@@ -1,6 +1,6 @@
 // [[Rcpp::depends("RcppArmadillo", "RcppProgress")]]
 #include <RcppArmadillo.h>
-#include <math.h>
+#include <cmath>
 #define ARMA_64BIT_WORD
 using namespace Rcpp ;
 
@@ -28,8 +28,8 @@ double CalcLikelihoodC( arma::sp_mat dtm, NumericMatrix phi, NumericMatrix theta
         double a = 0; // first element in the log likelihood
         
        for( int nd = 0; nd < n; nd++ ){
-           
-           a = a + log( n - nd);
+
+           a = a + std::log( double(n - nd) );
            
         }
         
@@ -46,7 +46,7 @@ double CalcLikelihoodC( arma::sp_mat dtm, NumericMatrix phi, NumericMatrix theta
                
            }
            
-           b = b + dtm( d , v) * log(p_word); 
+           b = b + dtm( d , v) * std::log(p_word); 
            
        }
        
@@ -54,11 +54,12 @@ double CalcLikelihoodC( arma::sp_mat dtm, NumericMatrix phi, NumericMatrix theta
        double c = 0; 
        
        for(int v = 0; v < nwords; v++ ){
-           int x_dv = dtm( d, v );
+         
+           double x_dv = dtm( d, v );
            
            for( int j = 0; j < x_dv; j++){
                
-               c = c + log(x_dv - j);
+               c = c + std::log(double(x_dv - j));
                
            }
        }
