@@ -12,15 +12,19 @@
 #' @export
 #' @examples
 #' # Load a pre-formatted dtm and topic model
-#' data(acq2) 
+#' data(nih_sample_topic_model) 
+#' data(nih_sample_dtm)
 #' 
 #' # Coherence of topic 1
-#' ProbCoherence(topic = model$phi[ 1 , ], dtm = dtm, M = 5)
+#' ProbCoherence(topic = nih_sample_topic_model$phi[ 1 , ], dtm = nih_sample_dtm, M = 5)
 #' 
 
 ProbCoherence <- function( topic, dtm, M=5){
-  warning("ProbCoherence is deprecated. It will be removed in textmineR v2.0.0",
-          call.=F)
+  .Deprecated(new = "CalcProbCoherence", package = "textmineR",
+              msg = "ProbCoherence is deprecated and will be removed in textmineR v2.0.0
+              Use 'CalcProbCoherence' instead.",
+              old = "ProbCoherence")
+
 ## TODO: consider changing probability calculations from document frequency to term frequency
       
   # ordered vector of most probable M terms given a topic

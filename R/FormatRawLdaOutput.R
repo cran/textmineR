@@ -11,21 +11,22 @@
 #' @export
 #' @examples
 #' # Load a pre-formatted dtm and topic model
-#' data(acq2) 
+#' data(nih_sample_dtm) 
 #' 
 #' # re-create a character vector of documents from the DTM
-#' lex <- Dtm2Docs(dtm)
+#' lex <- Dtm2Docs(nih_sample_dtm)
 #' 
 #' # Format for input to lda::lda.collapsed.gibbs.sampler
-#' lex <- lda::lexicalize(lex, vocab=colnames(dtm))
+#' lex <- lda::lexicalize(lex, vocab=colnames(nih_sample_dtm))
 #' 
 #' # Fit the model from lda::lda.collapsed.gibbs.sampler
 #' lda <- lda::lda.collapsed.gibbs.sampler(documents = lex, K = 100, 
-#'                                          vocab = colnames(dtm), num.iterations=200, 
+#'                                          vocab = colnames(nih_sample_dtm), 
+#'                                          num.iterations=200, 
 #'                                          alpha=0.1, eta=0.05)
 #'                                          
 #' # Format the result to get phi and theta matrices                                        
-#' lda <- FormatRawLdaOutput(lda.result=lda, docnames=rownames(dtm), smooth=TRUE)
+#' lda <- FormatRawLdaOutput(lda.result=lda, docnames=rownames(nih_sample_dtm), smooth=TRUE)
 #' 
 
 
@@ -40,7 +41,7 @@ FormatRawLdaOutput <- function(lda.result, docnames, smooth=TRUE){
     }
 	theta <- theta/Matrix::rowSums(theta)
 	rownames(theta) <- docnames
-	colnames(theta) <- paste("t.", 1:ncol(theta), sep="" )
+	colnames(theta) <- paste("t_", 1:ncol(theta), sep="" )
   
   
 
