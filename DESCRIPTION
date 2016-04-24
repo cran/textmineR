@@ -1,7 +1,7 @@
 Package: textmineR
 Title: Functions for Text Mining and Topic Modeling
-Version: 2.0.0
-Date: 2016-04-18
+Version: 2.0.1
+Date: 2016-04-23
 Author: "Thomas W. Jones <jones.thos.w@gmail.com>"
 Maintainer: Thomas W. Jones <jones.thos.w@gmail.com>
 Description: An aid for text mining in R, with a syntax that
@@ -21,6 +21,6 @@ LazyData: true
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress
 RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2016-04-19 03:23:44 UTC; tommy
+Packaged: 2016-04-23 23:18:08 UTC; tommy
 Repository: CRAN
-Date/Publication: 2016-04-19 08:12:08
+Date/Publication: 2016-04-24 16:33:45

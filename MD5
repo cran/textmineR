@@ -1,4 +1,4 @@
-98065152a3d46f2b3457c63f706d4ab9 *DESCRIPTION
+16b70d59b1cf7bebf00b2e52859696c8 *DESCRIPTION
 1dae9470b528d4811fae7f188cd89d4c *NAMESPACE
 4b966849f003e59b59c9a7782c17eba6 *R/CalcHellingerDist.R
 316adb53e7d50501851fc77c9db748be *R/CalcJSDivergence.R
@@ -8,8 +8,8 @@
 e5a76d20ad6b07095ebe4150086e293e *R/CalcTopicModelR2.R
 a61bf5607d95fb6df58a4d8c5461abd5 *R/Cluster2TopicModel.R
 c64d1f8eeb5bc7e3c77f19e1b8dd7fb8 *R/CorrectS.R
-ed798fef7d7e43ade354e4129d5984b4 *R/CreateDtm.R
-fb6e3c4293c6a3a5f6b3587104d7f618 *R/CreateTcm.R
+2d9a4fdeb5a90e34c0bbb4ec0b157a0e *R/CreateDtm.R
+14bd51b033f9ef96724afca60eb183a6 *R/CreateTcm.R
 a7e49d025e2abc3d480cef04ec864386 *R/DepluralizeDtm.R
 0f17908594e3e52bb98c273ff446b027 *R/Dtm2Docs.R
 a20eb69bb68c34757596551c80e3e517 *R/Dtm2Tcm.R
@@ -29,7 +29,7 @@ cb4e2e8dd0bd7ee30decdf063969b0c3 *R/RecursiveRbind.R
 4928bd24c50e945088b08e7cae6ff709 *R/TermDocFreq.R
 e4fb82ec900409557998ba87e61f5cd8 *R/TmParallelApply.R
 2a5ea236e697d19a3eb3d15f06b9c3ef *R/Vec2Dtm.R
-4a9492f9932b4247acb87c917ac78742 *README.md
+5d47427b35e2ebf81e759ef30b5bad6b *README.md
 cb086d4585cdd30bf57b25b4640ddf62 *data/nih_sample.rda
 e98b10f5ad6a64e6115b53194e937256 *data/nih_sample_dtm.rda
 239450539bd7dd8223a1bd7871f120d8 *data/nih_sample_topic_model.rda
