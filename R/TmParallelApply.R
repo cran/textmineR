@@ -9,6 +9,7 @@
 #' using a Windows machine. Defauts to \code{NULL}
 #' @param libraries A character vector of library/package names to load on to
 #' each cluster if using a Windows machine. Defaults to \code{NULL}
+#' @param envir Environment from which to export variables in varlist
 #' @details This function is used to parallelize executions in \code{textmineR}. It is 
 #' necessary because of differing capabilities between Windows and Unix.
 #' Unix systems use \code{\link[parallel]{mclapply}}. Windows 
@@ -22,7 +23,7 @@
 #' result <- TmParallelApply(x, f)
 #' }
 TmParallelApply <- function(X, FUN, cpus=parallel::detectCores(), 
-                            export=NULL, libraries=NULL){
+                            export=NULL, libraries=NULL, envir = parent.frame()){
   
   os <- .Platform$OS.type
   
@@ -31,6 +32,18 @@ TmParallelApply <- function(X, FUN, cpus=parallel::detectCores(),
     out <- parallel::mclapply(X = X, FUN = FUN, mc.cores = cpus)
     
   }else{
+    # Declare a function for environment scoping
+    # Credit: Hadely Wickham's book "Advanced R"
+    
+    where <- function(name, env = parent.frame()){
+      if (identical(env, emptyenv())) {
+        stop("Can't find ", name, call. = FALSE)
+      } else if (exists(name, envir = env, inherits = FALSE)) {
+        env
+      } else {
+        where(name, parent.env(env))
+      }
+    }
     
     cl <- parallel::makeCluster(cpus)
     
@@ -44,14 +57,23 @@ TmParallelApply <- function(X, FUN, cpus=parallel::detectCores(),
           eval(parse(text = paste("library(", l, ")", sep="")))
         }
       }
-      parallel::clusterExport(cl, varlist = c("libraries", "lib_fun"))
+      
+      parallel::clusterExport(cl, varlist = "libraries", 
+                              envir = where("libraries"))
+      
+      parallel::clusterExport(cl, varlist = "lib_fun", envir = where("lib_fun"))
       
       parallel::clusterCall(cl, fun=lib_fun)
       
     }
     
     # export any other objects needed
-    if( ! is.null(export) ) parallel::clusterExport(cl, varlist=export)
+    if( ! is.null(export) ) {
+      for(j in 1:length(export)){
+        parallel::clusterExport(cl, varlist=export[ j ],
+                                envir = envir)
+      }
+    }
     
     out <- parallel::parLapply(cl , X = X, fun = FUN)
     
