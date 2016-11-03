@@ -1,7 +1,7 @@
 Package: textmineR
 Title: Functions for Text Mining and Topic Modeling
-Version: 2.0.3
-Date: 2016-10-05
+Version: 2.0.4
+Date: 2016-11-02
 Author: "Thomas W. Jones <jones.thos.w@gmail.com>"
 Maintainer: Thomas W. Jones <jones.thos.w@gmail.com>
 Description: An aid for text mining in R, with a syntax that
@@ -11,7 +11,7 @@ Description: An aid for text mining in R, with a syntax that
     topic models.
 SystemRequirements: GNU make, C++11
 Depends: R (>= 3.0.2), Matrix
-Imports: methods, lda, parallel, topicmodels, text2vec (>= 0.3), tm,
+Imports: methods, lda, parallel, topicmodels, text2vec (>= 0.4), tm,
         stringr, SnowballC, Rcpp, RcppProgress, RSpectra
 Suggests: digest
 License: GPL (>= 3)
@@ -21,6 +21,6 @@ LazyData: true
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress
 RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2016-10-06 17:12:46 UTC; tommy
+Packaged: 2016-11-03 03:13:54 UTC; tommy
 Repository: CRAN
-Date/Publication: 2016-10-06 19:29:16
+Date/Publication: 2016-11-03 11:11:46
