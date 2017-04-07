@@ -78,4 +78,3 @@ model <- FitLdaModel(dtm = nih_sample_dtm[ sample(1:nrow(nih_sample_dtm), 20), ]
 
 str(model)
 }
-
