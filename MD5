@@ -1,5 +1,5 @@
-b2a08a3b3fbd0d2636a75b2e689bc733 *DESCRIPTION
-78c69b2e0dfad27b250be00a75d5982b *NAMESPACE
+026fb7ec3e3042a928d27093437d914e *DESCRIPTION
+87d4bf1844613b8a68459401d20bca90 *NAMESPACE
 4b966849f003e59b59c9a7782c17eba6 *R/CalcHellingerDist.R
 316adb53e7d50501851fc77c9db748be *R/CalcJSDivergence.R
 64bd0d989370df0398d67fadd04a08ca *R/CalcLikelihood.R
@@ -9,7 +9,7 @@ e5a76d20ad6b07095ebe4150086e293e *R/CalcTopicModelR2.R
 a61bf5607d95fb6df58a4d8c5461abd5 *R/Cluster2TopicModel.R
 c64d1f8eeb5bc7e3c77f19e1b8dd7fb8 *R/CorrectS.R
 40118d61c854e10f8908afbb577e135d *R/CreateDtm.R
-5bbb5a1574ddd6a95c3d1edd390c4333 *R/CreateTcm.R
+c598d2928c05664cefebec3ede3c8de0 *R/CreateTcm.R
 a7e49d025e2abc3d480cef04ec864386 *R/DepluralizeDtm.R
 0f17908594e3e52bb98c273ff446b027 *R/Dtm2Docs.R
 a20eb69bb68c34757596551c80e3e517 *R/Dtm2Tcm.R
@@ -25,10 +25,10 @@ e20d8f537e9ea46c5e4ac53d6416e0a6 *R/GetTopTerms.R
 1aa462896679f2c552c98eb05dda1222 *R/HellDist.R
 e13f41462c2ff613b9d42eb01d146b1b *R/JSD.R
 279d9627386ee119e2bce29c579d2514 *R/LabelTopics.R
-ad2c7f6500fc5c5e5170dfe8fb22e413 *R/RcppExports.R
+cfdc54c79041a89bd00d7a6e977cea77 *R/RcppExports.R
 cb4e2e8dd0bd7ee30decdf063969b0c3 *R/RecursiveRbind.R
 4928bd24c50e945088b08e7cae6ff709 *R/TermDocFreq.R
-8bb68d40539a2f66895c16dca22bd2db *R/TmParallelApply.R
+924c5ce8327613bf3cfc67e18fe58631 *R/TmParallelApply.R
 2a5ea236e697d19a3eb3d15f06b9c3ef *R/Vec2Dtm.R
 72fa0bd62c9ec68b600f4a3d697c7d71 *README.md
 cb086d4585cdd30bf57b25b4640ddf62 *data/nih_sample.rda
@@ -72,5 +72,4 @@ a2d6e407e48344cf12d30319dbdd6b0b *src/CalcSumSquares.cpp
 e6e9ed599795975b67e2bb08bd887710 *src/Hellinger_cpp.cpp
 08894a882456304490a6a1c5cdfd5ed1 *src/JSD_cpp.cpp
 207c38ecff31c0b444e42ec867a7260f *src/JSDmat.cpp
-0ced679fb3b0e247c95617a4695c069f *src/RcppExports.cpp
-734cda7cb40a4cf06a5b76dd87f46407 *src/textmineR_init.cpp
+3e43ae68365b5898b485e02c3e15076a *src/RcppExports.cpp
