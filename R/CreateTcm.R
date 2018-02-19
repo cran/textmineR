@@ -1,7 +1,7 @@
-#' @title Convert a character vector to a term co-occurence matrix.
-#' @description This is the main term co-occurence matrix creating function for \code{textmineR}.
+#' @title Convert a character vector to a term co-occurrence matrix.
+#' @description This is the main term co-occurrence matrix creating function for \code{textmineR}.
 #' In most cases, all you need to do is import documents as a character vector in R and then 
-#' run this function to get a term co-occurence matrix that is compatible with the 
+#' run this function to get a term co-occurrence matrix that is compatible with the 
 #' rest of \code{textmineR}'s functionality and many other libraries. \code{CreateTcm}
 #' is built on top of the excellent \code{\link[text2vec]{text2vec}} library.
 #' 
@@ -32,10 +32,10 @@
 #' @details Setting \code{skipgram_window} counts the number of times that term
 #'          \code{j} appears within \code{skipgram_window} places of term \code{i}.
 #'          \code{Inf} and \code{0} create somewhat special TCMs. Setting \code{skipgram_window}
-#'          to \code{Inf} counts the number of times that term \code{j} appears 
-#'          across all documents containing \code{i}. Setting \code{skipgram_window}
-#'          to \code{0} counts the number of documents in which term \code{j} 
-#'          and term \code{i} occur together. A TCM where \code{skipgram_window} 
+#'          to \code{Inf} counts the number of documents in which term \code{j} 
+#'          and term \code{i} occur together. Setting \code{skipgram_window}
+#'          to \code{0} counts the number of terms shared by document \code{j} 
+#'          and document \code{i}. A TCM where \code{skipgram_window} 
 #'          is \code{0} is the only TCM that will be symmetric.
 #' @note The following transformations are applied to \code{stopword_vec} as 
 #'       well as \code{doc_vec}: 

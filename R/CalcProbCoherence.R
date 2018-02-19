@@ -1,11 +1,11 @@
-#' Probailistic coherence of topics
+#' Probabilistic coherence of topics
 #' @description Calculates the probabilistic coherence of a topic or topics. 
-#' This approximates semmantic coherence or human understandability of a topic.
+#' This approximates semantic coherence or human understandability of a topic.
 #' @param phi A numeric matrix or a numeric vector. The vector, or rows of the 
 #' matrix represent the numeric relationship between topic(s) and terms. For
 #' example, this relationship may be p(word|topic) or p(topic|word).
-#' @param dtm A document term matrix  or co-occurence matrix of class 
-#' \code{matrix} or whose class inherits from the \code{Matrix} packge. Columns
+#' @param dtm A document term matrix  or co-occurrence matrix of class 
+#' \code{matrix} or whose class inherits from the \code{Matrix} package. Columns
 #' must index terms.
 #' @param M An integer for the number of words to be used in the calculation. 
 #' Defaults to 5
@@ -69,11 +69,16 @@ CalcProbCoherence<- function(phi, dtm, M = 5){
     count.mat <- Matrix::t(dtm.t) %*% dtm.t
     num.docs <- nrow(dtm)
     p.mat <- count.mat/num.docs
+    # result <- sapply(1:(ncol(count.mat) - 1), function(x) {
+    #   mean(p.mat[x, (x + 1):ncol(p.mat)]/p.mat[x, x] - Matrix::diag(p.mat)[(x + 
+    #                                                                           1):ncol(p.mat)], na.rm = TRUE)
+    # })
+    # mean(result, na.rm = TRUE)
     result <- sapply(1:(ncol(count.mat) - 1), function(x) {
-      mean(p.mat[x, (x + 1):ncol(p.mat)]/p.mat[x, x] - Matrix::diag(p.mat)[(x + 
-                                                                              1):ncol(p.mat)], na.rm = TRUE)
+      p.mat[x, (x + 1):ncol(p.mat)]/p.mat[x, x] - 
+        Matrix::diag(p.mat)[(x + 1):ncol(p.mat)]
     })
-    mean(result, na.rm = TRUE)
+    mean(unlist(result), na.rm = TRUE) 
   }
   
   # if phi is a single topic vector get that one coherence

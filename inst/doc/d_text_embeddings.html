@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Thomas W. Jones" />
+
+<meta name="date" content="2018-02-19" />
+
+<title></title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore"><ol start="4" style="list-style-type: decimal">
+<li>Text embeddings</li>
+</ol></h1>
+<h4 class="author"><em>Thomas W. Jones</em></h4>
+<h4 class="date"><em>2018-02-19</em></h4>
+
+
+
+<div id="text-embeddings" class="section level1">
+<h1>Text embeddings</h1>
+<p><a href="https://en.wikipedia.org/wiki/Word_embedding">Text embeddings</a> are particularly hot right now. While textmineR doesn’t (yet) explicitly implement any embedding models like GloVe or word2vec, you can still get embeddings. Text embedding algorithms aren’t conceptually different from topic models. They are, however, operating on a different matrix. Instead of reducing the dimensions of a document term matrix, text embeddings are obtained by reducing the dimensions of a term co-occurrence matrix. In principle, one can use LDA or LSA in the same way. In this case, rows of theta are embedded words. A phi_prime may be obtained to project documents or new text into the embedding space.</p>
+<div id="create-a-term-co-occurrence-matrix" class="section level2">
+<h2>Create a term co-occurrence matrix</h2>
+<p>The first step in fitting a text embedding model is to <a href="https://stackoverflow.com/questions/24073030/what-are-co-occurance-matrixes-and-how-are-they-used-in-nlp">create a term co-occurrence matrix</a> or TCM. In a TCM, both columns and rows index tokens. The <span class="math inline">\((i,j)\)</span> entries of the matrix are a count of the number of times word <span class="math inline">\(i\)</span> co-occures with <span class="math inline">\(j\)</span>. However, there are several ways to count co-occurrence. textmineR gives you three.</p>
+<p>The most useful way of counting co-occurrence for text embeddings is called the skip-gram model. Under the skip-gram model, the count would be the number of times word <span class="math inline">\(j\)</span> appears within a certain window of <span class="math inline">\(i\)</span>. A skip-gram window of two, for example, would count the number of times word <span class="math inline">\(j\)</span> occured in the two words immediately before word <span class="math inline">\(i\)</span> or the two words immediately after word <span class="math inline">\(i\)</span>. This helps capture the local context of words. In fact, you can think of a text embedding as being a topic model based on the local context of words. Whereas a traditional topic model is modeling words in their global context.</p>
+<p>To read more about the skip-gram model, which was popularized in the embedding model word2vec, look <a href="https://becominghuman.ai/how-does-word2vecs-skip-gram-work-f92e0525def4">here</a>.</p>
+<p>The other types of co-occurence matrix textmineR provides are both global. One is a count of the number of documents in which words <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> co-occur. The other is the number of terms that co-occur between <em>documents</em> <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. See <code>help(CreateTcm)</code> for info on these.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># load the NIH data set</span>
+<span class="kw">library</span>(textmineR)
+
+<span class="co"># load nih_sample data set from textmineR</span>
+<span class="kw">data</span>(nih_sample)
+
+<span class="co"># First create a TCM using skip grams, we'll use a 5-word window</span>
+<span class="co"># most options available on CreateDtm are also available for CreateTcm</span>
+tcm &lt;-<span class="st"> </span><span class="kw">CreateTcm</span>(<span class="dt">doc_vec =</span> nih_sample<span class="op">$</span>ABSTRACT_TEXT,
+                 <span class="dt">skipgram_window =</span> <span class="dv">5</span>,
+                 <span class="dt">verbose =</span> <span class="ot">FALSE</span>,
+                 <span class="dt">cpus =</span> <span class="dv">2</span>)
+
+<span class="co"># a TCM is generally larger than a DTM</span>
+<span class="kw">dim</span>(tcm)
+<span class="co">#&gt; [1] 5210 5210</span></code></pre></div>
+</div>
+<div id="fitting-a-model" class="section level2">
+<h2>Fitting a model</h2>
+<p>Once we have a TCM, we can use the same procedure to make an embedding model as we used to make a topic model. Note that it may take considerably longer (because of dimensionality of the matrix) or shorter (because of sparsity) to fit an embedding on the same corpus.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use LDA to get embeddings into probability space</span>
+<span class="co"># This will take considerably longer as the TCM matrix has many more rows </span>
+<span class="co"># than a DTM</span>
+embeddings &lt;-<span class="st"> </span><span class="kw">FitLdaModel</span>(<span class="dt">dtm =</span> tcm,
+                          <span class="dt">k =</span> <span class="dv">100</span>,
+                          <span class="dt">iterations =</span> <span class="dv">500</span>,
+                          <span class="dt">cpus =</span> <span class="dv">2</span>)</code></pre></div>
+</div>
+<div id="interpretation-of-phi-and-theta" class="section level2">
+<h2>Interpretation of <span class="math inline">\(\Phi\)</span> and <span class="math inline">\(\Theta\)</span></h2>
+<p>In the language of text embeddings, <span class="math inline">\(\Theta\)</span> gives us our tokens embedded in a probability space (because we used LDA, Euclidean space if we used LSA). <span class="math inline">\(\Phi\)</span> defines the dimensions of our embbeding space. The rows of <span class="math inline">\(\Phi\)</span> can still be interpreted as topics. But they are topics of local contexts, rather than within whole documents.</p>
+</div>
+<div id="evaluating-the-model" class="section level2">
+<h2>Evaluating the model</h2>
+<p>As it happens, the same evaluation metrics developed for topic modeling also apply here. There are subtle differences in interpretation because we are using a TCM not a DTM. i.e. occurrences relate words to each other, not to documents.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get an R-squared for general goodness of fit</span>
+embeddings<span class="op">$</span>r2 &lt;-<span class="st"> </span><span class="kw">CalcTopicModelR2</span>(<span class="dt">dtm =</span> tcm, 
+                                  <span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                  <span class="dt">theta =</span> embeddings<span class="op">$</span>theta,
+                                  <span class="dt">cpus =</span> <span class="dv">2</span>)
+
+embeddings<span class="op">$</span>r2
+<span class="co">#&gt; [1] 0.2842953</span>
+
+<span class="co"># Get coherence (relative to the TCM) for goodness of fit</span>
+embeddings<span class="op">$</span>coherence &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                          <span class="dt">dtm =</span> tcm)
+
+<span class="kw">summary</span>(embeddings<span class="op">$</span>coherence)
+<span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="co">#&gt; -0.01198  0.01593  0.05257  0.06208  0.09449  0.20367</span></code></pre></div>
+<p>We will create a summary table as we did with a topic model before.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get top terms, no labels because we don't have bigrams</span>
+embeddings<span class="op">$</span>top_terms &lt;-<span class="st"> </span><span class="kw">GetTopTerms</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                    <span class="dt">M =</span> <span class="dv">5</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a summary table, similar to the above</span>
+embeddings<span class="op">$</span>summary &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">topic =</span> <span class="kw">rownames</span>(embeddings<span class="op">$</span>phi),
+                                 <span class="dt">coherence =</span> <span class="kw">round</span>(embeddings<span class="op">$</span>coherence, <span class="dv">3</span>),
+                                 <span class="dt">prevalence =</span> <span class="kw">round</span>(<span class="kw">colSums</span>(embeddings<span class="op">$</span>theta), <span class="dv">2</span>),
+                                 <span class="dt">top_terms =</span> <span class="kw">apply</span>(embeddings<span class="op">$</span>top_terms, <span class="dv">2</span>, <span class="cf">function</span>(x){
+                                   <span class="kw">paste</span>(x, <span class="dt">collapse =</span> <span class="st">&quot;, &quot;</span>)
+                                 }),
+                                 <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>Here it is ordered by prevalence. (Here, we might say density of tokens along each embedding dimension.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">embeddings<span class="op">$</span>summary[ <span class="kw">order</span>(embeddings<span class="op">$</span>summary<span class="op">$</span>prevalence, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>) , ][ <span class="dv">1</span><span class="op">:</span><span class="dv">10</span> , ]</code></pre></div>
+<table>
+<caption>Summary of top 10 embedding dimensions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">topic</th>
+<th align="right">coherence</th>
+<th align="right">prevalence</th>
+<th align="left">top_terms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t_91</td>
+<td align="left">t_91</td>
+<td align="right">0.170</td>
+<td align="right">142.28</td>
+<td align="left">aim, specific, study, research, studies</td>
+</tr>
+<tr class="even">
+<td>t_70</td>
+<td align="left">t_70</td>
+<td align="right">0.160</td>
+<td align="right">108.97</td>
+<td align="left">research, core, program, support, training</td>
+</tr>
+<tr class="odd">
+<td>t_46</td>
+<td align="left">t_46</td>
+<td align="right">0.155</td>
+<td align="right">89.50</td>
+<td align="left">health, research, cancer, clinical, prevention</td>
+</tr>
+<tr class="even">
+<td>t_22</td>
+<td align="left">t_22</td>
+<td align="right">0.148</td>
+<td align="right">87.55</td>
+<td align="left">cells, cell, human, mast, aim</td>
+</tr>
+<tr class="odd">
+<td>t_29</td>
+<td align="left">t_29</td>
+<td align="right">0.094</td>
+<td align="right">77.72</td>
+<td align="left">response, brain, human, tissue, responses</td>
+</tr>
+<tr class="even">
+<td>t_69</td>
+<td align="left">t_69</td>
+<td align="right">0.095</td>
+<td align="right">72.85</td>
+<td align="left">data, studies, work, results, molecular</td>
+</tr>
+<tr class="odd">
+<td>t_90</td>
+<td align="left">t_90</td>
+<td align="right">0.123</td>
+<td align="right">69.92</td>
+<td align="left">genetic, mechanisms, expression, gene, specific</td>
+</tr>
+<tr class="even">
+<td>t_59</td>
+<td align="left">t_59</td>
+<td align="right">0.113</td>
+<td align="right">67.57</td>
+<td align="left">factor, carbon, genes, pathways, information</td>
+</tr>
+<tr class="odd">
+<td>t_12</td>
+<td align="left">t_12</td>
+<td align="right">0.080</td>
+<td align="right">65.98</td>
+<td align="left">treatment, effect, intervention, therapy, design</td>
+</tr>
+<tr class="even">
+<td>t_49</td>
+<td align="left">t_49</td>
+<td align="right">0.073</td>
+<td align="right">65.78</td>
+<td align="left">hiv, based, assess, programs, strategies</td>
+</tr>
+</tbody>
+</table>
+<p>And here is the table ordered by coherence.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">embeddings<span class="op">$</span>summary[ <span class="kw">order</span>(embeddings<span class="op">$</span>summary<span class="op">$</span>coherence, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>) , ][ <span class="dv">1</span><span class="op">:</span><span class="dv">10</span> , ]</code></pre></div>
+<table>
+<caption>Summary of 10 most coherent embedding dimensions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">topic</th>
+<th align="right">coherence</th>
+<th align="right">prevalence</th>
+<th align="left">top_terms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t_44</td>
+<td align="left">t_44</td>
+<td align="right">0.204</td>
+<td align="right">52.02</td>
+<td align="left">microbiome, gut, composition, crc, bas</td>
+</tr>
+<tr class="even">
+<td>t_34</td>
+<td align="left">t_34</td>
+<td align="right">0.181</td>
+<td align="right">52.77</td>
+<td align="left">fertility, ethnic, race, differences, study</td>
+</tr>
+<tr class="odd">
+<td>t_95</td>
+<td align="left">t_95</td>
+<td align="right">0.181</td>
+<td align="right">52.14</td>
+<td align="left">memory, sleep, dependent, cellular, cognitive</td>
+</tr>
+<tr class="even">
+<td>t_73</td>
+<td align="left">t_73</td>
+<td align="right">0.170</td>
+<td align="right">51.11</td>
+<td align="left">secondary, ptc, primary, brafv, pathways</td>
+</tr>
+<tr class="odd">
+<td>t_91</td>
+<td align="left">t_91</td>
+<td align="right">0.170</td>
+<td align="right">142.28</td>
+<td align="left">aim, specific, study, research, studies</td>
+</tr>
+<tr class="even">
+<td>t_72</td>
+<td align="left">t_72</td>
+<td align="right">0.163</td>
+<td align="right">47.03</td>
+<td align="left">signaling, mediated, activation, nrf, critical</td>
+</tr>
+<tr class="odd">
+<td>t_70</td>
+<td align="left">t_70</td>
+<td align="right">0.160</td>
+<td align="right">108.97</td>
+<td align="left">research, core, program, support, training</td>
+</tr>
+<tr class="even">
+<td>t_71</td>
+<td align="left">t_71</td>
+<td align="right">0.156</td>
+<td align="right">55.49</td>
+<td align="left">influenza, vaccine, strain, antigen, protective</td>
+</tr>
+<tr class="odd">
+<td>t_46</td>
+<td align="left">t_46</td>
+<td align="right">0.155</td>
+<td align="right">89.50</td>
+<td align="left">health, research, cancer, clinical, prevention</td>
+</tr>
+<tr class="even">
+<td>t_21</td>
+<td align="left">t_21</td>
+<td align="right">0.151</td>
+<td align="right">45.04</td>
+<td align="left">power, family, force, sarcomere, dependence</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="embedding-documents-under-the-model" class="section level2">
+<h2>Embedding documents under the model</h2>
+<p>You can embed whole documents under your model. Doing so, effectively makes your embeddings a topic model that have topics of local contexts, instead of global ones. Why might you want to do this? The short answer is that you may have reason to believe that an embedding model may give you better topics, especially if you are trying to pick up on more subtle topics. In a later example, we’ll be doing that to build a document summarizer.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Make a DTM from our documents</span>
+dtm_embed &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(<span class="dt">doc_vec =</span> nih_sample<span class="op">$</span>ABSTRACT_TEXT,
+                       <span class="dt">doc_names =</span> nih_sample<span class="op">$</span>APPLICATION_ID,
+                       <span class="dt">ngram_window =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>),
+                       <span class="dt">verbose =</span> <span class="ot">FALSE</span>,
+                       <span class="dt">cpus =</span> <span class="dv">2</span>)
+
+dtm_embed &lt;-<span class="st"> </span>dtm_embed[ , <span class="kw">colnames</span>(tcm) ] <span class="co"># make sure vocab lines up</span>
+
+<span class="co"># Get phi_prime, the projection matrix</span>
+embeddings<span class="op">$</span>phi_prime &lt;-<span class="st"> </span><span class="kw">CalcPhiPrime</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                     <span class="dt">theta =</span> embeddings<span class="op">$</span>theta)
+
+<span class="co"># Project the documents into the embedding space</span>
+embedding_assignments &lt;-<span class="st"> </span>dtm_embed <span class="op">/</span><span class="st"> </span><span class="kw">rowSums</span>(dtm_embed)
+
+embedding_assignments &lt;-<span class="st"> </span>embedding_assignments <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(embeddings<span class="op">$</span>phi_prime)
+
+embedding_assignments &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(embedding_assignments)</code></pre></div>
+<p>Once you’ve embedded your documents, you effectively have a new <span class="math inline">\(\Theta\)</span>. We can use that to evaluate how well the embedding topics fit the documents as a whole by re-calculaing R-squared and coherence.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get a goodness of fit relative to the DTM</span>
+embeddings<span class="op">$</span>r2_dtm &lt;-<span class="st"> </span><span class="kw">CalcTopicModelR2</span>(<span class="dt">dtm =</span> dtm_embed, 
+                                      <span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                      <span class="dt">theta =</span> embedding_assignments,
+                                      <span class="dt">cpus =</span> <span class="dv">2</span>)
+
+embeddings<span class="op">$</span>r2_dtm
+<span class="co">#&gt; [1] 0.1665389</span>
+
+<span class="co"># get coherence relative to DTM</span>
+embeddings<span class="op">$</span>coherence_dtm &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                              <span class="dt">dtm =</span> dtm_embed)
+
+<span class="kw">summary</span>(embeddings<span class="op">$</span>coherence_dtm)
+<span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
+<span class="co">#&gt; -0.06445  0.01766  0.05761  0.09177  0.13063  0.60910</span></code></pre></div>
+</div>
+<div id="where-to-next" class="section level2">
+<h2>Where to next?</h2>
+<p>Embedding research is only just beginning. I would encourage you to play with them and develop your own methods.</p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
