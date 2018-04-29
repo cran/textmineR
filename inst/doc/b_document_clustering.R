@@ -89,13 +89,24 @@ cluster_summary <- data.frame(cluster = unique(clustering),
 ## ----echo = FALSE--------------------------------------------------------
 knitr::kable(cluster_summary, caption = "Cluster summary table")
 
-## ----warning = FALSE, fit.height = 7.5, fig.width = 7.5------------------
+## ----eval = FALSE--------------------------------------------------------
+#  # plot a word cloud of one cluster as an example
+#  wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]),
+#                       freq = cluster_words[[ 5 ]],
+#                       max.words = 50,
+#                       random.order = FALSE,
+#                       colors = c("red", "yellow", "blue"),
+#                       main = "Top words in cluster 100")
+
+## ----echo = FALSE, warning = FALSE, fit.height = 7.5, fig.width = 7.5----
 # plot a word cloud of one cluster as an example
-wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]), 
+suppressWarnings({
+  wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]), 
                      freq = cluster_words[[ 5 ]], 
                      max.words = 50, 
                      random.order = FALSE, 
                      colors = c("red", "yellow", "blue"),
                      main = "Top words in cluster 100")
+})
 
 
