@@ -1,7 +1,7 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", warning = FALSE
 )
 
 ## ------------------------------------------------------------------------
@@ -28,7 +28,7 @@ dim(tcm)
 # than a DTM
 embeddings <- FitLdaModel(dtm = tcm,
                           k = 100,
-                          iterations = 500,
+                          iterations = 200, # i recommend a larger value, 500 or more
                           cpus = 2)
 
 ## ------------------------------------------------------------------------

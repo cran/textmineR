@@ -1,7 +1,7 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>", warning = FALSE
 )
 
 ## ------------------------------------------------------------------------
@@ -11,6 +11,13 @@ library(textmineR)
 data(movie_review, package = "text2vec")
 
 str(movie_review)
+
+# let's take a sample so the demo will run quickly
+# note: textmineR is generally quite scaleable, depending on your system
+set.seed(123)
+s <- sample(1:nrow(movie_review), 500)
+
+movie_review <- movie_review[ s , ]
 
 # create a document term matrix 
 dtm <- CreateDtm(doc_vec = movie_review$review, # character vector of documents
@@ -26,15 +33,12 @@ dtm <- CreateDtm(doc_vec = movie_review$review, # character vector of documents
 
 ## ------------------------------------------------------------------------
 
-# start with a sample of 500 documents so our example doesn't take too long
-dtm_sample <- dtm[ sample(1:nrow(dtm), 500) , ]
-
 # Fit a Latent Dirichlet Allocation model
 # note the number of topics is arbitrary here
 # see extensions for more info
-model <- FitLdaModel(dtm = dtm_sample, 
+model <- FitLdaModel(dtm = dtm, 
                      k = 100, 
-                     iterations = 500,
+                     iterations = 200, # i recommend a larger value, 500 or more
                      alpha = 0.1, # this is the default value
                      beta = 0.05, # this is the default value
                      cpus = 2) 
@@ -51,7 +55,7 @@ str(model)
 
 # R-squared 
 # - only works for probabilistic models like LDA and CTM
-model$r2 <- CalcTopicModelR2(dtm = dtm_sample, 
+model$r2 <- CalcTopicModelR2(dtm = dtm, 
                              phi = model$phi,
                              theta = model$theta,
                              cpus = 2)
@@ -60,7 +64,7 @@ model$r2
 
 # log Likelihood (does not consider the prior) 
 # - only works for probabilistic models like LDA and CTM
-model$ll <- CalcLikelihood(dtm = dtm_sample, 
+model$ll <- CalcLikelihood(dtm = dtm, 
                            phi = model$phi, 
                            theta = model$theta,
                            cpus = 2)
@@ -70,7 +74,7 @@ model$ll
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
 # probabilistic coherence, a measure of topic quality
 # this measure can be used with any topic model, not just probabilistic ones
-model$coherence <- CalcProbCoherence(phi = model$phi, dtm = dtm_sample, M = 5)
+model$coherence <- CalcProbCoherence(phi = model$phi, dtm = dtm, M = 5)
 
 summary(model$coherence)
 
@@ -97,7 +101,7 @@ model$prevalence <- colSums(model$theta) / sum(model$theta) * 100
 
 # textmineR has a naive topic labeling tool based on probable bigrams
 model$labels <- LabelTopics(assignments = model$theta > 0.05, 
-                            dtm = dtm_sample,
+                            dtm = dtm,
                             M = 1)
 
 head(model$labels)
@@ -136,8 +140,8 @@ assignments <- as.matrix(assignments) # convert to regular R dense matrix
 
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
 # compare the "fit" assignments to the predicted ones
-barplot(rbind(model$theta[ rownames(dtm_sample)[ 1 ] , ],
-              assignments[ rownames(dtm_sample)[ 1 ] , ]), 
+barplot(rbind(model$theta[ rownames(dtm)[ 1 ] , ],
+              assignments[ rownames(dtm)[ 1 ] , ]), 
         las = 2,
         main = "Comparing topic assignments",
         beside = TRUE,
@@ -151,11 +155,11 @@ legend("topleft",
 ## ------------------------------------------------------------------------
 
 # get a tf-idf matrix
-tf_sample <- TermDocFreq(dtm_sample)
+tf_sample <- TermDocFreq(dtm)
 
 tf_sample$idf[ is.infinite(tf_sample$idf) ] <- 0 # fix idf for missing words
 
-tf_idf <- t(dtm_sample / rowSums(dtm_sample)) * tf_sample$idf
+tf_idf <- t(dtm / rowSums(dtm)) * tf_sample$idf
 
 tf_idf <- t(tf_idf)
 
@@ -174,7 +178,7 @@ str(lsa_model)
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
 # probabilistic coherence, a measure of topic quality
 # - can be used with any topic lsa_model, e.g. LSA
-lsa_model$coherence <- CalcProbCoherence(phi = lsa_model$phi, dtm = dtm_sample, M = 5)
+lsa_model$coherence <- CalcProbCoherence(phi = lsa_model$phi, dtm = dtm, M = 5)
 
 summary(lsa_model$coherence)
 
@@ -199,7 +203,7 @@ lsa_model$prevalence <- colSums(lsa_model$theta) / sum(lsa_model$theta) * 100
 
 # textmineR has a naive topic labeling tool based on probable bigrams
 lsa_model$labels <- LabelTopics(assignments = lsa_model$theta > 0.05, 
-                            dtm = dtm_sample,
+                            dtm = dtm,
                             M = 1)
 
 ## ----eval = FALSE--------------------------------------------------------
@@ -249,8 +253,8 @@ lsa_assignments <- as.matrix(lsa_assignments) # convert to regular R dense matri
 
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
 # compare the "fit" assignments to the predicted ones
-barplot(rbind(lsa_model$theta[ rownames(dtm_sample)[ 1 ] , ],
-              lsa_assignments[ rownames(dtm_sample)[ 1 ] , ]), 
+barplot(rbind(lsa_model$theta[ rownames(dtm)[ 1 ] , ],
+              lsa_assignments[ rownames(dtm)[ 1 ] , ]), 
         las = 2,
         main = "Comparing topic assignments in LSA",
         beside = TRUE,
@@ -283,7 +287,7 @@ model_list <- TmParallelApply(X = k_list, FUN = function(k){
 
   m <- FitLdaModel(dtm = nih_sample_dtm, 
                    k = k, 
-                   iterations = 500, 
+                   iterations = 200, 
                    cpus = 1)
   m$k <- k
   m$coherence <- CalcProbCoherence(phi = m$phi, 

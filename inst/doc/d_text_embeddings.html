@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2018-04-29" />
+<meta name="date" content="2018-09-10" />
 
 <title></title>
 
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Text embeddings</li>
 </ol></h1>
 <h4 class="author"><em>Thomas W. Jones</em></h4>
-<h4 class="date"><em>2018-04-29</em></h4>
+<h4 class="date"><em>2018-09-10</em></h4>
 
 
 
@@ -111,7 +111,7 @@ tcm &lt;-<span class="st"> </span><span class="kw">CreateTcm</span>(<span class=
 <span class="co"># than a DTM</span>
 embeddings &lt;-<span class="st"> </span><span class="kw">FitLdaModel</span>(<span class="dt">dtm =</span> tcm,
                           <span class="dt">k =</span> <span class="dv">100</span>,
-                          <span class="dt">iterations =</span> <span class="dv">500</span>,
+                          <span class="dt">iterations =</span> <span class="dv">200</span>, <span class="co"># i recommend a larger value, 500 or more</span>
                           <span class="dt">cpus =</span> <span class="dv">2</span>)</code></pre></div>
 </div>
 <div id="interpretation-of-phi-and-theta" class="section level2">
@@ -128,15 +128,15 @@ embeddings<span class="op">$</span>r2 &lt;-<span class="st"> </span><span class=
                                   <span class="dt">cpus =</span> <span class="dv">2</span>)
 
 embeddings<span class="op">$</span>r2
-<span class="co">#&gt; [1] 0.2842953</span>
+<span class="co">#&gt; [1] 0.2786783</span>
 
 <span class="co"># Get coherence (relative to the TCM) for goodness of fit</span>
 embeddings<span class="op">$</span>coherence &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
                                           <span class="dt">dtm =</span> tcm)
 
 <span class="kw">summary</span>(embeddings<span class="op">$</span>coherence)
-<span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="co">#&gt; -0.01198  0.01593  0.05257  0.06208  0.09449  0.20367</span></code></pre></div>
+<span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span>
+<span class="co">#&gt; -0.005319  0.014635  0.045040  0.058624  0.092362  0.189357</span></code></pre></div>
 <p>We will create a summary table as we did with a topic model before.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get top terms, no labels because we don't have bigrams</span>
 embeddings<span class="op">$</span>top_terms &lt;-<span class="st"> </span><span class="kw">GetTopTerms</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
@@ -164,74 +164,74 @@ embeddings<span class="op">$</span>summary &lt;-<span class="st"> </span><span c
 </thead>
 <tbody>
 <tr class="odd">
-<td>t_91</td>
-<td align="left">t_91</td>
-<td align="right">0.170</td>
-<td align="right">142.28</td>
-<td align="left">aim, specific, study, research, studies</td>
+<td>t_80</td>
+<td align="left">t_80</td>
+<td align="right">0.166</td>
+<td align="right">126.94</td>
+<td align="left">aim, study, research, specific, studies</td>
 </tr>
 <tr class="even">
-<td>t_70</td>
-<td align="left">t_70</td>
-<td align="right">0.160</td>
-<td align="right">108.97</td>
-<td align="left">research, core, program, support, training</td>
+<td>t_60</td>
+<td align="left">t_60</td>
+<td align="right">0.129</td>
+<td align="right">109.13</td>
+<td align="left">research, program, support, training, investigators</td>
 </tr>
 <tr class="odd">
-<td>t_46</td>
-<td align="left">t_46</td>
-<td align="right">0.155</td>
-<td align="right">89.50</td>
-<td align="left">health, research, cancer, clinical, prevention</td>
+<td>t_28</td>
+<td align="left">t_28</td>
+<td align="right">0.127</td>
+<td align="right">106.72</td>
+<td align="left">cells, cell, human, brain, tissue</td>
 </tr>
 <tr class="even">
-<td>t_22</td>
-<td align="left">t_22</td>
-<td align="right">0.148</td>
-<td align="right">87.55</td>
-<td align="left">cells, cell, human, mast, aim</td>
+<td>t_27</td>
+<td align="left">t_27</td>
+<td align="right">0.154</td>
+<td align="right">99.38</td>
+<td align="left">health, research, clinical, treatment, cancer</td>
 </tr>
 <tr class="odd">
-<td>t_29</td>
-<td align="left">t_29</td>
-<td align="right">0.094</td>
-<td align="right">77.72</td>
-<td align="left">response, brain, human, tissue, responses</td>
+<td>t_81</td>
+<td align="left">t_81</td>
+<td align="right">0.077</td>
+<td align="right">78.59</td>
+<td align="left">data, studies, work, results, methods</td>
 </tr>
 <tr class="even">
-<td>t_69</td>
-<td align="left">t_69</td>
-<td align="right">0.095</td>
-<td align="right">72.85</td>
-<td align="left">data, studies, work, results, molecular</td>
-</tr>
-<tr class="odd">
-<td>t_90</td>
-<td align="left">t_90</td>
-<td align="right">0.123</td>
-<td align="right">69.92</td>
-<td align="left">genetic, mechanisms, expression, gene, specific</td>
-</tr>
-<tr class="even">
-<td>t_59</td>
-<td align="left">t_59</td>
-<td align="right">0.113</td>
-<td align="right">67.57</td>
-<td align="left">factor, carbon, genes, pathways, information</td>
-</tr>
-<tr class="odd">
 <td>t_12</td>
 <td align="left">t_12</td>
-<td align="right">0.080</td>
-<td align="right">65.98</td>
-<td align="left">treatment, effect, intervention, therapy, design</td>
+<td align="right">0.076</td>
+<td align="right">68.72</td>
+<td align="left">hiv, based, secondary, effective, design</td>
+</tr>
+<tr class="odd">
+<td>t_92</td>
+<td align="left">t_92</td>
+<td align="right">0.133</td>
+<td align="right">66.98</td>
+<td align="left">mechanisms, role, genetic, gene, specific</td>
 </tr>
 <tr class="even">
-<td>t_49</td>
-<td align="left">t_49</td>
-<td align="right">0.073</td>
-<td align="right">65.78</td>
-<td align="left">hiv, based, assess, programs, strategies</td>
+<td>t_54</td>
+<td align="left">t_54</td>
+<td align="right">0.162</td>
+<td align="right">65.62</td>
+<td align="left">dependent, sleep, memory, cellular, cognitive</td>
+</tr>
+<tr class="odd">
+<td>t_87</td>
+<td align="left">t_87</td>
+<td align="right">0.107</td>
+<td align="right">63.25</td>
+<td align="left">factors, risk, function, sud, social</td>
+</tr>
+<tr class="even">
+<td>t_17</td>
+<td align="left">t_17</td>
+<td align="right">0.065</td>
+<td align="right">61.90</td>
+<td align="left">large, wall, structural, understand, arterial</td>
 </tr>
 </tbody>
 </table>
@@ -250,74 +250,74 @@ embeddings<span class="op">$</span>summary &lt;-<span class="st"> </span><span c
 </thead>
 <tbody>
 <tr class="odd">
-<td>t_44</td>
-<td align="left">t_44</td>
-<td align="right">0.204</td>
-<td align="right">52.02</td>
-<td align="left">microbiome, gut, composition, crc, bas</td>
+<td>t_18</td>
+<td align="left">t_18</td>
+<td align="right">0.189</td>
+<td align="right">45.51</td>
+<td align="left">acids, fertility, ethnic, race, differences</td>
 </tr>
 <tr class="even">
-<td>t_34</td>
-<td align="left">t_34</td>
-<td align="right">0.181</td>
-<td align="right">52.77</td>
-<td align="left">fertility, ethnic, race, differences, study</td>
+<td>t_80</td>
+<td align="left">t_80</td>
+<td align="right">0.166</td>
+<td align="right">126.94</td>
+<td align="left">aim, study, research, specific, studies</td>
 </tr>
 <tr class="odd">
-<td>t_95</td>
-<td align="left">t_95</td>
-<td align="right">0.181</td>
-<td align="right">52.14</td>
-<td align="left">memory, sleep, dependent, cellular, cognitive</td>
+<td>t_54</td>
+<td align="left">t_54</td>
+<td align="right">0.162</td>
+<td align="right">65.62</td>
+<td align="left">dependent, sleep, memory, cellular, cognitive</td>
 </tr>
 <tr class="even">
-<td>t_73</td>
-<td align="left">t_73</td>
-<td align="right">0.170</td>
-<td align="right">51.11</td>
-<td align="left">secondary, ptc, primary, brafv, pathways</td>
+<td>t_64</td>
+<td align="left">t_64</td>
+<td align="right">0.162</td>
+<td align="right">60.58</td>
+<td align="left">microbiome, gut, composition, crc, tract</td>
 </tr>
 <tr class="odd">
-<td>t_91</td>
-<td align="left">t_91</td>
-<td align="right">0.170</td>
-<td align="right">142.28</td>
-<td align="left">aim, specific, study, research, studies</td>
+<td>t_27</td>
+<td align="left">t_27</td>
+<td align="right">0.154</td>
+<td align="right">99.38</td>
+<td align="left">health, research, clinical, treatment, cancer</td>
 </tr>
 <tr class="even">
-<td>t_72</td>
-<td align="left">t_72</td>
-<td align="right">0.163</td>
-<td align="right">47.03</td>
-<td align="left">signaling, mediated, activation, nrf, critical</td>
+<td>t_55</td>
+<td align="left">t_55</td>
+<td align="right">0.149</td>
+<td align="right">44.89</td>
+<td align="left">long, term, goal, da, aim</td>
 </tr>
 <tr class="odd">
-<td>t_70</td>
-<td align="left">t_70</td>
-<td align="right">0.160</td>
-<td align="right">108.97</td>
-<td align="left">research, core, program, support, training</td>
+<td>t_84</td>
+<td align="left">t_84</td>
+<td align="right">0.146</td>
+<td align="right">49.40</td>
+<td align="left">pathways, carbon, information, intracellular, define</td>
 </tr>
 <tr class="even">
-<td>t_71</td>
-<td align="left">t_71</td>
-<td align="right">0.156</td>
-<td align="right">55.49</td>
-<td align="left">influenza, vaccine, strain, antigen, protective</td>
+<td>t_47</td>
+<td align="left">t_47</td>
+<td align="right">0.136</td>
+<td align="right">48.71</td>
+<td align="left">influenza, vaccine, strain, induced, antigen</td>
 </tr>
 <tr class="odd">
-<td>t_46</td>
-<td align="left">t_46</td>
-<td align="right">0.155</td>
-<td align="right">89.50</td>
-<td align="left">health, research, cancer, clinical, prevention</td>
+<td>t_92</td>
+<td align="left">t_92</td>
+<td align="right">0.133</td>
+<td align="right">66.98</td>
+<td align="left">mechanisms, role, genetic, gene, specific</td>
 </tr>
 <tr class="even">
-<td>t_21</td>
-<td align="left">t_21</td>
-<td align="right">0.151</td>
-<td align="right">45.04</td>
-<td align="left">power, family, force, sarcomere, dependence</td>
+<td>t_20</td>
+<td align="left">t_20</td>
+<td align="right">0.130</td>
+<td align="right">50.50</td>
+<td align="left">blood, release, fragment, determine, important</td>
 </tr>
 </tbody>
 </table>
@@ -352,7 +352,7 @@ embeddings<span class="op">$</span>r2_dtm &lt;-<span class="st"> </span><span cl
                                       <span class="dt">cpus =</span> <span class="dv">2</span>)
 
 embeddings<span class="op">$</span>r2_dtm
-<span class="co">#&gt; [1] 0.1665389</span>
+<span class="co">#&gt; [1] 0.1632364</span>
 
 <span class="co"># get coherence relative to DTM</span>
 embeddings<span class="op">$</span>coherence_dtm &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
@@ -360,7 +360,7 @@ embeddings<span class="op">$</span>coherence_dtm &lt;-<span class="st"> </span><
 
 <span class="kw">summary</span>(embeddings<span class="op">$</span>coherence_dtm)
 <span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="co">#&gt; -0.06445  0.01766  0.05761  0.09177  0.13063  0.60910</span></code></pre></div>
+<span class="co">#&gt; -0.07839  0.01444  0.05425  0.08502  0.12789  0.44900</span></code></pre></div>
 </div>
 <div id="where-to-next" class="section level2">
 <h2>Where to next?</h2>
