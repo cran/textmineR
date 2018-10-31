@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2018-09-10" />
+<meta name="date" content="2018-10-31" />
 
 <title></title>
 
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Start here</li>
 </ol></h1>
 <h4 class="author"><em>Thomas W. Jones</em></h4>
-<h4 class="date"><em>2018-09-10</em></h4>
+<h4 class="date"><em>2018-10-31</em></h4>
 
 
 
@@ -81,14 +81,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>textmineR was created with three principles in mind:</p>
 <ol style="list-style-type: decimal">
 <li>Maximize interoperability within R’s ecosystem</li>
-<li>Scaleable in terms of object storeage and computation time</li>
+<li>Scaleable in terms of object storage and computation time</li>
 <li>Syntax that is idiomatic to R</li>
 </ol>
 <p>R has many packages for text mining and natural language processing (NLP). The <a href="https://CRAN.R-project.org/view=NaturalLanguageProcessing">CRAN task view on natural language processing</a> lists 53 unique packages. Some of these packages are interoperable. Some are not.</p>
-<p>textmineR strives for maximum interoperability in three ways. First, it uses the <code>dgCMatrix</code> class from the popular <a href="https://CRAN.R-project.org/package=Matrix"><code>Matrix</code> package</a> for document term matrices (DTMs) and term co-occurence matrices (TCMs). The <code>Matrix</code> package is an R “recommended” package with nearly 500 packages that depend, import, or suggest it. Compare that to the <a href="https://CRAN.R-project.org/package=slam"><code>slam</code> package</a> used by <a href="https://CRAN.R-project.org/package=tm"><code>tm</code></a> and its derivatives. <code>slam</code> has an order of magnitude fewer dependents. It is simply not as well integrated. <code>Matrix</code> also has methods that make the syntax for manipulating its matrices nearly identical to base R. This greatly reduces the cognitive burden of the programmers.</p>
+<p>textmineR strives for maximum interoperability in three ways. First, it uses the <code>dgCMatrix</code> class from the popular <a href="https://CRAN.R-project.org/package=Matrix"><code>Matrix</code> package</a> for document term matrices (DTMs) and term co-occurrence matrices (TCMs). The <code>Matrix</code> package is an R “recommended” package with nearly 500 packages that depend, import, or suggest it. Compare that to the <a href="https://CRAN.R-project.org/package=slam"><code>slam</code> package</a> used by <a href="https://CRAN.R-project.org/package=tm"><code>tm</code></a> and its derivatives. <code>slam</code> has an order of magnitude fewer dependents. It is simply not as well integrated. <code>Matrix</code> also has methods that make the syntax for manipulating its matrices nearly identical to base R. This greatly reduces the cognitive burden of the programmers.</p>
 <p>Second, textmineR relies on base R objects for corpus and metadata storage. Actually, it relies on the user to do so. textmineR’s core functions <code>CreateDtm</code> and <code>CreateTcm</code> take a simple character vector as input. Users may store their corpora as character vectors, lists, or data frames. <em>There is no need to learn a new <a href="https://CRAN.R-project.org/package=tm">‘Corpus’</a> class.</em></p>
-<p>Third and last, textmineR represents the output of topic models in a consistent way, a list containing two matrices. This is described in more detail in the next section. Several topic models are supported and the simple representation means that textmineR’s utility functions are useable with outputs from other packages, so long as they are represented as matrices of probabilities. (Again, see the next section for more detail.)</p>
-<p>textmineR acheives scalability through three means. First, sparse matrices (like the <code>dgCMatrix</code>) offer significant memory savings. Second, textmineR utilizes <code>Rcpp</code> throughout for speedup. Finally, textmineR uses parallel processing by default where possible. textmineR offers a function <code>TmParallelApply</code> which implements a framework for parallel processing that is syntactically agnostic between Windows and Unix-like operating systems. <code>TmParallelApply</code> is used liberally within textmineR and is exposed for users.</p>
+<p>Third and last, textmineR represents the output of topic models in a consistent way, a list containing two matrices. This is described in more detail in the next section. Several topic models are supported and the simple representation means that textmineR’s utility functions are usable with outputs from other packages, so long as they are represented as matrices of probabilities. (Again, see the next section for more detail.)</p>
+<p>textmineR achieves scalability through three means. First, sparse matrices (like the <code>dgCMatrix</code>) offer significant memory savings. Second, textmineR utilizes <code>Rcpp</code> throughout for speedup. Finally, textmineR uses parallel processing by default where possible. textmineR offers a function <code>TmParallelApply</code> which implements a framework for parallel processing that is syntactically agnostic between Windows and Unix-like operating systems. <code>TmParallelApply</code> is used liberally within textmineR and is exposed for users.</p>
 <p>textmineR does make some tradeoffs of performance for syntactic simplicity. textmineR is designed to run on a single node in a cluster computing environment. It can (and will by default) use all available cores of that node. If performance is your number one concern, see <a href="https://CRAN.R-project.org/package=text2vec"><code>text2vec</code></a>. textmineR uses some <code>text2vec</code> under the hood.</p>
 <p>textmineR strives for syntax that is idiomatic to R. This is, admittedly, a nebulous concept. textmineR does not create new classes where existing R classes exist. It strives for a functional programming paradigm. And it attempts to group closely-related sequential steps into single functions. This means that users will not have to make several temporary objects along the way. As an example, compare making a document term matrix in textmineR (example below) with <code>tm</code> or <code>text2vec</code>.</p>
 <p>As a side note: textmineR’s framework for NLP does not need to be exclusive to textmineR. Text mining packages in R can be interoperable with a few concepts. First, use <code>dgCMatrix</code> for DTMs and TCMs. Second, write most text mining models in a way that they can take a <code>dgCMatrix</code> as the input. Finally, keep non-base R classes to a minimum, especially for corpus and metadata management.</p>
@@ -102,10 +102,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The code below uses a dataset of movie reviews included with the <code>text2vec</code> package. This dataset is used for sentiment analysis. In addition to the text of the reviews. There is a binary variable indicating positive or negative sentiment. More on this later…</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(textmineR)
 <span class="co">#&gt; Loading required package: Matrix</span>
-<span class="co">#&gt; textmineR v3.0 is coming with major changes that WILL break things!</span>
-<span class="co">#&gt;    Please see https://github.com/TommyJones/textmineR/tree/3.0 for the </span>
-<span class="co">#&gt;    development version. Expected release is October or November of 2018.</span>
-<span class="co">#&gt;    Please submit questions or requests to https://github.com/TommyJones/textmineR/issues</span>
 
 <span class="co"># load movie_review dataset from text2vec</span>
 <span class="kw">data</span>(movie_review, <span class="dt">package =</span> <span class="st">&quot;text2vec&quot;</span>)
@@ -127,8 +123,8 @@ movie_review &lt;-<span class="st"> </span>movie_review[ s , ]
 dtm &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(<span class="dt">doc_vec =</span> movie_review<span class="op">$</span>review, <span class="co"># character vector of documents</span>
                  <span class="dt">doc_names =</span> movie_review<span class="op">$</span>id, <span class="co"># document names, optional</span>
                  <span class="dt">ngram_window =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="co"># minimum and maximum n-gram length</span>
-                 <span class="dt">stopword_vec =</span> <span class="kw">c</span>(tm<span class="op">::</span><span class="kw">stopwords</span>(<span class="st">&quot;english&quot;</span>), <span class="co"># stopwords from tm</span>
-                                  tm<span class="op">::</span><span class="kw">stopwords</span>(<span class="st">&quot;SMART&quot;</span>)), <span class="co"># this is the default value</span>
+                 <span class="dt">stopword_vec =</span> <span class="kw">c</span>(stopwords<span class="op">::</span><span class="kw">stopwords</span>(<span class="st">&quot;en&quot;</span>), <span class="co"># stopwords from tm</span>
+                                  stopwords<span class="op">::</span><span class="kw">stopwords</span>(<span class="dt">source =</span> <span class="st">&quot;smart&quot;</span>)), <span class="co"># this is the default value</span>
                  <span class="dt">lower =</span> <span class="ot">TRUE</span>, <span class="co"># lowercase - this is the default value</span>
                  <span class="dt">remove_punctuation =</span> <span class="ot">TRUE</span>, <span class="co"># punctuation - this is the default</span>
                  <span class="dt">remove_numbers =</span> <span class="ot">TRUE</span>, <span class="co"># numbers - this is the default</span>
@@ -587,7 +583,7 @@ doc_lengths &lt;-<span class="st"> </span><span class="kw">rowSums</span>(dtm)
 <span class="kw">summary</span>(doc_lengths)
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
 <span class="co">#&gt;    23.0    96.0   140.5   186.1   245.0   768.0</span></code></pre></div>
-<p>Often,it’s useful to prune your vocabulary and remove any tokens that appear in a samall number of documents. This will greatly reduce the vocabulary size (see <a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf’s law</a>) and improve computation time.</p>
+<p>Often,it’s useful to prune your vocabulary and remove any tokens that appear in a small number of documents. This will greatly reduce the vocabulary size (see <a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf’s law</a>) and improve computation time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># remove any tokens that were in 3 or fewer documents</span>
 dtm &lt;-<span class="st"> </span>dtm[ , <span class="kw">colSums</span>(dtm <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span> ] <span class="co"># alternatively: dtm[ , tf_mat$term_freq &gt; 3 ]</span>
 

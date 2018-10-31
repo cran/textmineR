@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2018-09-10" />
+<meta name="date" content="2018-10-31" />
 
 <title></title>
 
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Text embeddings</li>
 </ol></h1>
 <h4 class="author"><em>Thomas W. Jones</em></h4>
-<h4 class="date"><em>2018-09-10</em></h4>
+<h4 class="date"><em>2018-10-31</em></h4>
 
 
 
@@ -81,10 +81,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><a href="https://en.wikipedia.org/wiki/Word_embedding">Text embeddings</a> are particularly hot right now. While textmineR doesn’t (yet) explicitly implement any embedding models like GloVe or word2vec, you can still get embeddings. Text embedding algorithms aren’t conceptually different from topic models. They are, however, operating on a different matrix. Instead of reducing the dimensions of a document term matrix, text embeddings are obtained by reducing the dimensions of a term co-occurrence matrix. In principle, one can use LDA or LSA in the same way. In this case, rows of theta are embedded words. A phi_prime may be obtained to project documents or new text into the embedding space.</p>
 <div id="create-a-term-co-occurrence-matrix" class="section level2">
 <h2>Create a term co-occurrence matrix</h2>
-<p>The first step in fitting a text embedding model is to <a href="https://stackoverflow.com/questions/24073030/what-are-co-occurance-matrixes-and-how-are-they-used-in-nlp">create a term co-occurrence matrix</a> or TCM. In a TCM, both columns and rows index tokens. The <span class="math inline">\((i,j)\)</span> entries of the matrix are a count of the number of times word <span class="math inline">\(i\)</span> co-occures with <span class="math inline">\(j\)</span>. However, there are several ways to count co-occurrence. textmineR gives you three.</p>
-<p>The most useful way of counting co-occurrence for text embeddings is called the skip-gram model. Under the skip-gram model, the count would be the number of times word <span class="math inline">\(j\)</span> appears within a certain window of <span class="math inline">\(i\)</span>. A skip-gram window of two, for example, would count the number of times word <span class="math inline">\(j\)</span> occured in the two words immediately before word <span class="math inline">\(i\)</span> or the two words immediately after word <span class="math inline">\(i\)</span>. This helps capture the local context of words. In fact, you can think of a text embedding as being a topic model based on the local context of words. Whereas a traditional topic model is modeling words in their global context.</p>
+<p>The first step in fitting a text embedding model is to <a href="https://stackoverflow.com/questions/24073030/what-are-co-occurance-matrixes-and-how-are-they-used-in-nlp">create a term co-occurrence matrix</a> or TCM. In a TCM, both columns and rows index tokens. The <span class="math inline">\((i,j)\)</span> entries of the matrix are a count of the number of times word <span class="math inline">\(i\)</span> co-occurs with <span class="math inline">\(j\)</span>. However, there are several ways to count co-occurrence. textmineR gives you three.</p>
+<p>The most useful way of counting co-occurrence for text embeddings is called the skip-gram model. Under the skip-gram model, the count would be the number of times word <span class="math inline">\(j\)</span> appears within a certain window of <span class="math inline">\(i\)</span>. A skip-gram window of two, for example, would count the number of times word <span class="math inline">\(j\)</span> occurred in the two words immediately before word <span class="math inline">\(i\)</span> or the two words immediately after word <span class="math inline">\(i\)</span>. This helps capture the local context of words. In fact, you can think of a text embedding as being a topic model based on the local context of words. Whereas a traditional topic model is modeling words in their global context.</p>
 <p>To read more about the skip-gram model, which was popularized in the embedding model word2vec, look <a href="https://becominghuman.ai/how-does-word2vecs-skip-gram-work-f92e0525def4">here</a>.</p>
-<p>The other types of co-occurence matrix textmineR provides are both global. One is a count of the number of documents in which words <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> co-occur. The other is the number of terms that co-occur between <em>documents</em> <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. See <code>help(CreateTcm)</code> for info on these.</p>
+<p>The other types of co-occurrence matrix textmineR provides are both global. One is a count of the number of documents in which words <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> co-occur. The other is the number of terms that co-occur between <em>documents</em> <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. See <code>help(CreateTcm)</code> for info on these.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># load the NIH data set</span>
 <span class="kw">library</span>(textmineR)
@@ -95,7 +95,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="co"># First create a TCM using skip grams, we'll use a 5-word window</span>
 <span class="co"># most options available on CreateDtm are also available for CreateTcm</span>
 tcm &lt;-<span class="st"> </span><span class="kw">CreateTcm</span>(<span class="dt">doc_vec =</span> nih_sample<span class="op">$</span>ABSTRACT_TEXT,
-                 <span class="dt">skipgram_window =</span> <span class="dv">5</span>,
+                 <span class="dt">skipgram_window =</span> <span class="dv">10</span>,
                  <span class="dt">verbose =</span> <span class="ot">FALSE</span>,
                  <span class="dt">cpus =</span> <span class="dv">2</span>)
 
@@ -108,35 +108,34 @@ tcm &lt;-<span class="st"> </span><span class="kw">CreateTcm</span>(<span class=
 <p>Once we have a TCM, we can use the same procedure to make an embedding model as we used to make a topic model. Note that it may take considerably longer (because of dimensionality of the matrix) or shorter (because of sparsity) to fit an embedding on the same corpus.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use LDA to get embeddings into probability space</span>
 <span class="co"># This will take considerably longer as the TCM matrix has many more rows </span>
-<span class="co"># than a DTM</span>
+<span class="co"># than your average DTM</span>
 embeddings &lt;-<span class="st"> </span><span class="kw">FitLdaModel</span>(<span class="dt">dtm =</span> tcm,
-                          <span class="dt">k =</span> <span class="dv">100</span>,
-                          <span class="dt">iterations =</span> <span class="dv">200</span>, <span class="co"># i recommend a larger value, 500 or more</span>
+                          <span class="dt">k =</span> <span class="dv">50</span>,
+                          <span class="dt">iterations =</span> <span class="dv">200</span>,
+                          <span class="dt">burnin =</span> <span class="dv">180</span>,
+                          <span class="dt">alpha =</span> <span class="fl">0.1</span>,
+                          <span class="dt">beta =</span> <span class="fl">0.05</span>,
+                          <span class="dt">optimize_alpha =</span> <span class="ot">TRUE</span>,
+                          <span class="dt">calc_likelihood =</span> <span class="ot">FALSE</span>,
+                          <span class="dt">calc_coherence =</span> <span class="ot">TRUE</span>,
+                          <span class="dt">calc_r2 =</span> <span class="ot">TRUE</span>,
                           <span class="dt">cpus =</span> <span class="dv">2</span>)</code></pre></div>
 </div>
 <div id="interpretation-of-phi-and-theta" class="section level2">
 <h2>Interpretation of <span class="math inline">\(\Phi\)</span> and <span class="math inline">\(\Theta\)</span></h2>
-<p>In the language of text embeddings, <span class="math inline">\(\Theta\)</span> gives us our tokens embedded in a probability space (because we used LDA, Euclidean space if we used LSA). <span class="math inline">\(\Phi\)</span> defines the dimensions of our embbeding space. The rows of <span class="math inline">\(\Phi\)</span> can still be interpreted as topics. But they are topics of local contexts, rather than within whole documents.</p>
+<p>In the language of text embeddings, <span class="math inline">\(\Theta\)</span> gives us our tokens embedded in a probability space (because we used LDA, Euclidean space if we used LSA). <span class="math inline">\(\Phi\)</span> defines the dimensions of our embedding space. The rows of <span class="math inline">\(\Phi\)</span> can still be interpreted as topics. But they are topics of local contexts, rather than within whole documents.</p>
 </div>
 <div id="evaluating-the-model" class="section level2">
 <h2>Evaluating the model</h2>
 <p>As it happens, the same evaluation metrics developed for topic modeling also apply here. There are subtle differences in interpretation because we are using a TCM not a DTM. i.e. occurrences relate words to each other, not to documents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get an R-squared for general goodness of fit</span>
-embeddings<span class="op">$</span>r2 &lt;-<span class="st"> </span><span class="kw">CalcTopicModelR2</span>(<span class="dt">dtm =</span> tcm, 
-                                  <span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
-                                  <span class="dt">theta =</span> embeddings<span class="op">$</span>theta,
-                                  <span class="dt">cpus =</span> <span class="dv">2</span>)
-
 embeddings<span class="op">$</span>r2
-<span class="co">#&gt; [1] 0.2786783</span>
+<span class="co">#&gt; [1] 0.1746546</span>
 
 <span class="co"># Get coherence (relative to the TCM) for goodness of fit</span>
-embeddings<span class="op">$</span>coherence &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
-                                          <span class="dt">dtm =</span> tcm)
-
 <span class="kw">summary</span>(embeddings<span class="op">$</span>coherence)
-<span class="co">#&gt;      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span>
-<span class="co">#&gt; -0.005319  0.014635  0.045040  0.058624  0.092362  0.189357</span></code></pre></div>
+<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">#&gt;  0.0119  0.0731  0.1121  0.1280  0.1750  0.3218</span></code></pre></div>
 <p>We will create a summary table as we did with a topic model before.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get top terms, no labels because we don't have bigrams</span>
 embeddings<span class="op">$</span>top_terms &lt;-<span class="st"> </span><span class="kw">GetTopTerms</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
@@ -164,74 +163,74 @@ embeddings<span class="op">$</span>summary &lt;-<span class="st"> </span><span c
 </thead>
 <tbody>
 <tr class="odd">
-<td>t_80</td>
-<td align="left">t_80</td>
-<td align="right">0.166</td>
-<td align="right">126.94</td>
-<td align="left">aim, study, research, specific, studies</td>
+<td>t_22</td>
+<td align="left">t_22</td>
+<td align="right">0.218</td>
+<td align="right">184.11</td>
+<td align="left">aim, specific, study, determine, studies</td>
 </tr>
 <tr class="even">
-<td>t_60</td>
-<td align="left">t_60</td>
-<td align="right">0.129</td>
-<td align="right">109.13</td>
-<td align="left">research, program, support, training, investigators</td>
+<td>t_41</td>
+<td align="left">t_41</td>
+<td align="right">0.178</td>
+<td align="right">158.86</td>
+<td align="left">research, health, cancer, clinical, development</td>
 </tr>
 <tr class="odd">
-<td>t_28</td>
-<td align="left">t_28</td>
-<td align="right">0.127</td>
-<td align="right">106.72</td>
-<td align="left">cells, cell, human, brain, tissue</td>
+<td>t_21</td>
+<td align="left">t_21</td>
+<td align="right">0.209</td>
+<td align="right">146.48</td>
+<td align="left">core, research, program, support, training</td>
 </tr>
 <tr class="even">
-<td>t_27</td>
-<td align="left">t_27</td>
-<td align="right">0.154</td>
-<td align="right">99.38</td>
-<td align="left">health, research, clinical, treatment, cancer</td>
+<td>t_45</td>
+<td align="left">t_45</td>
+<td align="right">0.181</td>
+<td align="right">123.89</td>
+<td align="left">cells, cell, human, function, signaling</td>
 </tr>
 <tr class="odd">
-<td>t_81</td>
-<td align="left">t_81</td>
-<td align="right">0.077</td>
-<td align="right">78.59</td>
-<td align="left">data, studies, work, results, methods</td>
-</tr>
-<tr class="even">
-<td>t_12</td>
-<td align="left">t_12</td>
-<td align="right">0.076</td>
-<td align="right">68.72</td>
-<td align="left">hiv, based, secondary, effective, design</td>
-</tr>
-<tr class="odd">
-<td>t_92</td>
-<td align="left">t_92</td>
-<td align="right">0.133</td>
-<td align="right">66.98</td>
-<td align="left">mechanisms, role, genetic, gene, specific</td>
-</tr>
-<tr class="even">
-<td>t_54</td>
-<td align="left">t_54</td>
-<td align="right">0.162</td>
-<td align="right">65.62</td>
-<td align="left">dependent, sleep, memory, cellular, cognitive</td>
-</tr>
-<tr class="odd">
-<td>t_87</td>
-<td align="left">t_87</td>
-<td align="right">0.107</td>
-<td align="right">63.25</td>
-<td align="left">factors, risk, function, sud, social</td>
-</tr>
-<tr class="even">
 <td>t_17</td>
 <td align="left">t_17</td>
-<td align="right">0.065</td>
-<td align="right">61.90</td>
-<td align="left">large, wall, structural, understand, arterial</td>
+<td align="right">0.135</td>
+<td align="right">118.94</td>
+<td align="left">based, treatment, design, effect, development</td>
+</tr>
+<tr class="even">
+<td>t_14</td>
+<td align="left">t_14</td>
+<td align="right">0.136</td>
+<td align="right">113.22</td>
+<td align="left">factors, risk, early, social, sud</td>
+</tr>
+<tr class="odd">
+<td>t_16</td>
+<td align="left">t_16</td>
+<td align="right">0.149</td>
+<td align="right">110.60</td>
+<td align="left">role, mechanisms, gene, critical, genetic</td>
+</tr>
+<tr class="even">
+<td>t_43</td>
+<td align="left">t_43</td>
+<td align="right">0.195</td>
+<td align="right">110.52</td>
+<td align="left">brain, cancer, tumor, cells, patients</td>
+</tr>
+<tr class="odd">
+<td>t_49</td>
+<td align="left">t_49</td>
+<td align="right">0.144</td>
+<td align="right">109.38</td>
+<td align="left">response, tissue, responses, immune, host</td>
+</tr>
+<tr class="even">
+<td>t_19</td>
+<td align="left">t_19</td>
+<td align="right">0.062</td>
+<td align="right">107.02</td>
+<td align="left">high, imaging, metastases, vivo, modified</td>
 </tr>
 </tbody>
 </table>
@@ -250,74 +249,74 @@ embeddings<span class="op">$</span>summary &lt;-<span class="st"> </span><span c
 </thead>
 <tbody>
 <tr class="odd">
-<td>t_18</td>
-<td align="left">t_18</td>
-<td align="right">0.189</td>
-<td align="right">45.51</td>
-<td align="left">acids, fertility, ethnic, race, differences</td>
+<td>t_31</td>
+<td align="left">t_31</td>
+<td align="right">0.322</td>
+<td align="right">95.70</td>
+<td align="left">provided, applicant, project, patients, description</td>
 </tr>
 <tr class="even">
-<td>t_80</td>
-<td align="left">t_80</td>
-<td align="right">0.166</td>
-<td align="right">126.94</td>
-<td align="left">aim, study, research, specific, studies</td>
+<td>t_46</td>
+<td align="left">t_46</td>
+<td align="right">0.283</td>
+<td align="right">101.39</td>
+<td align="left">proteins, fly, cutaneous, infection, response</td>
 </tr>
 <tr class="odd">
-<td>t_54</td>
-<td align="left">t_54</td>
-<td align="right">0.162</td>
-<td align="right">65.62</td>
-<td align="left">dependent, sleep, memory, cellular, cognitive</td>
+<td>t_34</td>
+<td align="left">t_34</td>
+<td align="right">0.278</td>
+<td align="right">98.03</td>
+<td align="left">microbiome, gut, composition, crc, bas</td>
 </tr>
 <tr class="even">
-<td>t_64</td>
-<td align="left">t_64</td>
-<td align="right">0.162</td>
-<td align="right">60.58</td>
-<td align="left">microbiome, gut, composition, crc, tract</td>
+<td>t_25</td>
+<td align="left">t_25</td>
+<td align="right">0.238</td>
+<td align="right">97.01</td>
+<td align="left">carbon, pathways, environment, intracellular, metabolism</td>
 </tr>
 <tr class="odd">
-<td>t_27</td>
-<td align="left">t_27</td>
-<td align="right">0.154</td>
-<td align="right">99.38</td>
-<td align="left">health, research, clinical, treatment, cancer</td>
+<td>t_5</td>
+<td align="left">t_5</td>
+<td align="right">0.221</td>
+<td align="right">101.74</td>
+<td align="left">fertility, ethnic, race, knowledge, force</td>
 </tr>
 <tr class="even">
-<td>t_55</td>
-<td align="left">t_55</td>
-<td align="right">0.149</td>
-<td align="right">44.89</td>
-<td align="left">long, term, goal, da, aim</td>
+<td>t_22</td>
+<td align="left">t_22</td>
+<td align="right">0.218</td>
+<td align="right">184.11</td>
+<td align="left">aim, specific, study, determine, studies</td>
 </tr>
 <tr class="odd">
-<td>t_84</td>
-<td align="left">t_84</td>
-<td align="right">0.146</td>
-<td align="right">49.40</td>
-<td align="left">pathways, carbon, information, intracellular, define</td>
+<td>t_38</td>
+<td align="left">t_38</td>
+<td align="right">0.210</td>
+<td align="right">99.11</td>
+<td align="left">sleep, dependent, memory, cognitive, reduced</td>
 </tr>
 <tr class="even">
-<td>t_47</td>
-<td align="left">t_47</td>
-<td align="right">0.136</td>
-<td align="right">48.71</td>
-<td align="left">influenza, vaccine, strain, induced, antigen</td>
+<td>t_21</td>
+<td align="left">t_21</td>
+<td align="right">0.209</td>
+<td align="right">146.48</td>
+<td align="left">core, research, program, support, training</td>
 </tr>
 <tr class="odd">
-<td>t_92</td>
-<td align="left">t_92</td>
-<td align="right">0.133</td>
-<td align="right">66.98</td>
-<td align="left">mechanisms, role, genetic, gene, specific</td>
+<td>t_15</td>
+<td align="left">t_15</td>
+<td align="right">0.203</td>
+<td align="right">100.98</td>
+<td align="left">lung, expression, ipf, patients, key</td>
 </tr>
 <tr class="even">
-<td>t_20</td>
-<td align="left">t_20</td>
-<td align="right">0.130</td>
-<td align="right">50.50</td>
-<td align="left">blood, release, fragment, determine, important</td>
+<td>t_50</td>
+<td align="left">t_50</td>
+<td align="right">0.200</td>
+<td align="right">104.31</td>
+<td align="left">ri, ptc, fc, pathways, brafv</td>
 </tr>
 </tbody>
 </table>
@@ -325,6 +324,7 @@ embeddings<span class="op">$</span>summary &lt;-<span class="st"> </span><span c
 <div id="embedding-documents-under-the-model" class="section level2">
 <h2>Embedding documents under the model</h2>
 <p>You can embed whole documents under your model. Doing so, effectively makes your embeddings a topic model that have topics of local contexts, instead of global ones. Why might you want to do this? The short answer is that you may have reason to believe that an embedding model may give you better topics, especially if you are trying to pick up on more subtle topics. In a later example, we’ll be doing that to build a document summarizer.</p>
+<p>A note on the below: TCMs may be very sparse and cause us to run into computational underflow issues when using the “gibbs” prediction method. As a result, I’m choosing to use the “dot” method.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Make a DTM from our documents</span>
 dtm_embed &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(<span class="dt">doc_vec =</span> nih_sample<span class="op">$</span>ABSTRACT_TEXT,
                        <span class="dt">doc_names =</span> nih_sample<span class="op">$</span>APPLICATION_ID,
@@ -332,35 +332,28 @@ dtm_embed &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(<span 
                        <span class="dt">verbose =</span> <span class="ot">FALSE</span>,
                        <span class="dt">cpus =</span> <span class="dv">2</span>)
 
-dtm_embed &lt;-<span class="st"> </span>dtm_embed[ , <span class="kw">colnames</span>(tcm) ] <span class="co"># make sure vocab lines up</span>
-
-<span class="co"># Get phi_prime, the projection matrix</span>
-embeddings<span class="op">$</span>phi_prime &lt;-<span class="st"> </span><span class="kw">CalcPhiPrime</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
-                                     <span class="dt">theta =</span> embeddings<span class="op">$</span>theta)
+dtm_embed &lt;-<span class="st"> </span>dtm_embed[,<span class="kw">colSums</span>(dtm_embed) <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>]
 
 <span class="co"># Project the documents into the embedding space</span>
-embedding_assignments &lt;-<span class="st"> </span>dtm_embed <span class="op">/</span><span class="st"> </span><span class="kw">rowSums</span>(dtm_embed)
-
-embedding_assignments &lt;-<span class="st"> </span>embedding_assignments <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(embeddings<span class="op">$</span>phi_prime)
-
-embedding_assignments &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(embedding_assignments)</code></pre></div>
-<p>Once you’ve embedded your documents, you effectively have a new <span class="math inline">\(\Theta\)</span>. We can use that to evaluate how well the embedding topics fit the documents as a whole by re-calculaing R-squared and coherence.</p>
+embedding_assignments &lt;-<span class="st"> </span><span class="kw">predict</span>(embeddings, dtm_embed, <span class="dt">method =</span> <span class="st">&quot;gibbs&quot;</span>,
+                                 <span class="dt">iterations =</span> <span class="dv">200</span>, <span class="dt">burnin =</span> <span class="dv">180</span>)</code></pre></div>
+<p>Once you’ve embedded your documents, you effectively have a new <span class="math inline">\(\Theta\)</span>. We can use that to evaluate how well the embedding topics fit the documents as a whole by re-calculatingR-squared and coherence.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get a goodness of fit relative to the DTM</span>
 embeddings<span class="op">$</span>r2_dtm &lt;-<span class="st"> </span><span class="kw">CalcTopicModelR2</span>(<span class="dt">dtm =</span> dtm_embed, 
-                                      <span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+                                      <span class="dt">phi =</span> embeddings<span class="op">$</span>phi[,<span class="kw">colnames</span>(dtm_embed)], <span class="co"># line up vocabulary</span>
                                       <span class="dt">theta =</span> embedding_assignments,
                                       <span class="dt">cpus =</span> <span class="dv">2</span>)
 
 embeddings<span class="op">$</span>r2_dtm
-<span class="co">#&gt; [1] 0.1632364</span>
+<span class="co">#&gt; [1] 0.2298521</span>
 
 <span class="co"># get coherence relative to DTM</span>
-embeddings<span class="op">$</span>coherence_dtm &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,
+embeddings<span class="op">$</span>coherence_dtm &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi[,<span class="kw">colnames</span>(dtm_embed)], <span class="co"># line up vocabulary</span>
                                               <span class="dt">dtm =</span> dtm_embed)
 
 <span class="kw">summary</span>(embeddings<span class="op">$</span>coherence_dtm)
-<span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="co">#&gt; -0.07839  0.01444  0.05425  0.08502  0.12789  0.44900</span></code></pre></div>
+<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">#&gt; 0.02284 0.07596 0.11879 0.15447 0.20744 0.40667</span></code></pre></div>
 </div>
 <div id="where-to-next" class="section level2">
 <h2>Where to next?</h2>

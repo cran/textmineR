@@ -1,7 +1,7 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", warning = FALSE
+  comment = "#>"
 )
 
 ## ----embedding-----------------------------------------------------------
@@ -13,7 +13,7 @@ data(movie_review, package = "text2vec")
 # let's take a sample so the demo will run quickly
 # note: textmineR is generally quite scaleable, depending on your system
 set.seed(123)
-s <- sample(1:nrow(movie_review), 500)
+s <- sample(1:nrow(movie_review), 200)
 
 movie_review <- movie_review[ s , ]
 
@@ -23,7 +23,7 @@ movie_review$review <- stringr::str_replace_all(movie_review$review, "<br */>", 
 # First create a TCM using skip grams, we'll use a 5-word window
 # most options available on CreateDtm are also available for CreateTcm
 tcm <- CreateTcm(doc_vec = movie_review$review,
-                 skipgram_window = 5,
+                 skipgram_window = 10,
                  verbose = FALSE,
                  cpus = 2)
 
@@ -31,13 +31,17 @@ tcm <- CreateTcm(doc_vec = movie_review$review,
 # This will take considerably longer as the TCM matrix has many more rows 
 # than a DTM
 embeddings <- FitLdaModel(dtm = tcm,
-                          k = 100,
-                          iterations = 200, # i recommend a larger value, 500 or more
+                          k = 50,
+                          iterations = 200,
+                          burnin = 180,
+                          alpha = 0.1,
+                          beta = 0.05,
+                          optimize_alpha = TRUE,
+                          calc_likelihood = FALSE,
+                          calc_coherence = FALSE,
+                          calc_r2 = FALSE,
                           cpus = 2)
 
-# and we'll get our projection matrix
-embeddings$phi_prime <- CalcPhiPrime(phi = embeddings$phi, 
-                                     theta = embeddings$theta)
 
 ## ----eval = FALSE--------------------------------------------------------
 #    # parse it into sentences
@@ -51,11 +55,11 @@ embeddings$phi_prime <- CalcPhiPrime(phi = embeddings$phi,
 #    # remove any documents with 2 or fewer words
 #    e <- e[ rowSums(e) > 2 , ]
 #  
-#    vocab <- intersect(colnames(e), colnames(phi_prime))
+#    vocab <- intersect(colnames(e), colnames(gamma))
 #  
 #    e <- e / rowSums(e)
 #  
-#    e <- e[ , vocab ] %*% t(phi_prime[ , vocab ])
+#    e <- e[ , vocab ] %*% t(gamma[ , vocab ])
 #  
 #    e <- as.matrix(e)
 #  
@@ -100,12 +104,12 @@ library(igraph)
 
 # let's do this in a function
 
-summarizer <- function(doc, phi_prime) {
+summarizer <- function(doc, gamma) {
   
   # recursive fanciness to handle multiple docs at once
   if (length(doc) > 1 )
     # use a try statement to catch any weirdness that may arise
-    return(sapply(doc, function(d) try(summarizer(d, phi_prime))))
+    return(sapply(doc, function(d) try(summarizer(d, gamma))))
   
   # parse it into sentences
   sent <- stringi::stri_split_boundaries(doc, type = "sentence")[[ 1 ]]
@@ -118,11 +122,11 @@ summarizer <- function(doc, phi_prime) {
   # remove any documents with 2 or fewer words
   e <- e[ rowSums(e) > 2 , ]
   
-  vocab <- intersect(colnames(e), colnames(phi_prime))
+  vocab <- intersect(colnames(e), colnames(gamma))
   
   e <- e / rowSums(e)
   
-  e <- e[ , vocab ] %*% t(phi_prime[ , vocab ])
+  e <- e[ , vocab ] %*% t(gamma[ , vocab ])
   
   e <- as.matrix(e)
   
@@ -162,7 +166,7 @@ summarizer <- function(doc, phi_prime) {
 docs <- movie_review$review[ 1:3 ]
 names(docs) <- movie_review$id[ 1:3 ]
 
-sums <- summarizer(docs, phi_prime = embeddings$phi_prime)
+sums <- summarizer(docs, gamma = embeddings$gamma)
 
 sums
 

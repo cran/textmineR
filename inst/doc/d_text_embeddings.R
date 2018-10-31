@@ -1,7 +1,7 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", warning = FALSE
+  comment = "#>"
 )
 
 ## ------------------------------------------------------------------------
@@ -15,7 +15,7 @@ data(nih_sample)
 # First create a TCM using skip grams, we'll use a 5-word window
 # most options available on CreateDtm are also available for CreateTcm
 tcm <- CreateTcm(doc_vec = nih_sample$ABSTRACT_TEXT,
-                 skipgram_window = 5,
+                 skipgram_window = 10,
                  verbose = FALSE,
                  cpus = 2)
 
@@ -25,25 +25,24 @@ dim(tcm)
 ## ------------------------------------------------------------------------
 # use LDA to get embeddings into probability space
 # This will take considerably longer as the TCM matrix has many more rows 
-# than a DTM
+# than your average DTM
 embeddings <- FitLdaModel(dtm = tcm,
-                          k = 100,
-                          iterations = 200, # i recommend a larger value, 500 or more
+                          k = 50,
+                          iterations = 200,
+                          burnin = 180,
+                          alpha = 0.1,
+                          beta = 0.05,
+                          optimize_alpha = TRUE,
+                          calc_likelihood = FALSE,
+                          calc_coherence = TRUE,
+                          calc_r2 = TRUE,
                           cpus = 2)
 
 ## ------------------------------------------------------------------------
 # Get an R-squared for general goodness of fit
-embeddings$r2 <- CalcTopicModelR2(dtm = tcm, 
-                                  phi = embeddings$phi,
-                                  theta = embeddings$theta,
-                                  cpus = 2)
-
 embeddings$r2
 
 # Get coherence (relative to the TCM) for goodness of fit
-embeddings$coherence <- CalcProbCoherence(phi = embeddings$phi,
-                                          dtm = tcm)
-
 summary(embeddings$coherence)
 
 ## ------------------------------------------------------------------------
@@ -82,30 +81,23 @@ dtm_embed <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT,
                        verbose = FALSE,
                        cpus = 2)
 
-dtm_embed <- dtm_embed[ , colnames(tcm) ] # make sure vocab lines up
-
-# Get phi_prime, the projection matrix
-embeddings$phi_prime <- CalcPhiPrime(phi = embeddings$phi,
-                                     theta = embeddings$theta)
+dtm_embed <- dtm_embed[,colSums(dtm_embed) > 2]
 
 # Project the documents into the embedding space
-embedding_assignments <- dtm_embed / rowSums(dtm_embed)
-
-embedding_assignments <- embedding_assignments %*% t(embeddings$phi_prime)
-
-embedding_assignments <- as.matrix(embedding_assignments)
+embedding_assignments <- predict(embeddings, dtm_embed, method = "gibbs",
+                                 iterations = 200, burnin = 180)
 
 ## ------------------------------------------------------------------------
 # get a goodness of fit relative to the DTM
 embeddings$r2_dtm <- CalcTopicModelR2(dtm = dtm_embed, 
-                                      phi = embeddings$phi,
+                                      phi = embeddings$phi[,colnames(dtm_embed)], # line up vocabulary
                                       theta = embedding_assignments,
                                       cpus = 2)
 
 embeddings$r2_dtm
 
 # get coherence relative to DTM
-embeddings$coherence_dtm <- CalcProbCoherence(phi = embeddings$phi,
+embeddings$coherence_dtm <- CalcProbCoherence(phi = embeddings$phi[,colnames(dtm_embed)], # line up vocabulary
                                               dtm = dtm_embed)
 
 summary(embeddings$coherence_dtm)

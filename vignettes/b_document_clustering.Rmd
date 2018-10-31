@@ -32,8 +32,8 @@ data(nih_sample)
 dtm <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT, # character vector of documents
                  doc_names = nih_sample$APPLICATION_ID, # document names
                  ngram_window = c(1, 2), # minimum and maximum n-gram length
-                 stopword_vec = c(tm::stopwords("english"), # stopwords from tm
-                                  tm::stopwords("SMART")), # this is the default value
+                 stopword_vec = c(stopwords::stopwords("en"), # stopwords from tm
+                                  stopwords::stopwords(source = "smart")), # this is the default value
                  lower = TRUE, # lowercase - this is the default value
                  remove_punctuation = TRUE, # punctuation - this is the default
                  remove_numbers = TRUE, # numbers - this is the default
@@ -46,7 +46,7 @@ tf_mat <- TermDocFreq(dtm)
 ```
 
 
-First, we must re-weight the word counts in the document term matrix. We do this by multiplying the term frequency (in this case, count of words in documents) by an inverse document frequncy (IDF) vector. textmineR calculates IDF for the $i$-th word as
+First, we must re-weight the word counts in the document term matrix. We do this by multiplying the term frequency (in this case, count of words in documents) by an inverse document frequency (IDF) vector. textmineR calculates IDF for the $i$-th word as
 
 \begin{align}
   IDF_i = ln\big(\frac{N}{\sum_{j = 1}^N C(word_i, doc_j)}\big)

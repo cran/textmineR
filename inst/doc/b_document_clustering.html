@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2018-09-10" />
+<meta name="date" content="2018-10-31" />
 
 <title></title>
 
@@ -72,7 +72,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>document clustering</li>
 </ol></h1>
 <h4 class="author"><em>Thomas W. Jones</em></h4>
-<h4 class="date"><em>2018-09-10</em></h4>
+<h4 class="date"><em>2018-10-31</em></h4>
 
 
 
@@ -89,8 +89,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 dtm &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(<span class="dt">doc_vec =</span> nih_sample<span class="op">$</span>ABSTRACT_TEXT, <span class="co"># character vector of documents</span>
                  <span class="dt">doc_names =</span> nih_sample<span class="op">$</span>APPLICATION_ID, <span class="co"># document names</span>
                  <span class="dt">ngram_window =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="co"># minimum and maximum n-gram length</span>
-                 <span class="dt">stopword_vec =</span> <span class="kw">c</span>(tm<span class="op">::</span><span class="kw">stopwords</span>(<span class="st">&quot;english&quot;</span>), <span class="co"># stopwords from tm</span>
-                                  tm<span class="op">::</span><span class="kw">stopwords</span>(<span class="st">&quot;SMART&quot;</span>)), <span class="co"># this is the default value</span>
+                 <span class="dt">stopword_vec =</span> <span class="kw">c</span>(stopwords<span class="op">::</span><span class="kw">stopwords</span>(<span class="st">&quot;en&quot;</span>), <span class="co"># stopwords from tm</span>
+                                  stopwords<span class="op">::</span><span class="kw">stopwords</span>(<span class="dt">source =</span> <span class="st">&quot;smart&quot;</span>)), <span class="co"># this is the default value</span>
                  <span class="dt">lower =</span> <span class="ot">TRUE</span>, <span class="co"># lowercase - this is the default value</span>
                  <span class="dt">remove_punctuation =</span> <span class="ot">TRUE</span>, <span class="co"># punctuation - this is the default</span>
                  <span class="dt">remove_numbers =</span> <span class="ot">TRUE</span>, <span class="co"># numbers - this is the default</span>
@@ -99,7 +99,7 @@ dtm &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(<span class=
 
 <span class="co"># construct the matrix of term counts to get the IDF vector</span>
 tf_mat &lt;-<span class="st"> </span><span class="kw">TermDocFreq</span>(dtm)</code></pre></div>
-<p>First, we must re-weight the word counts in the document term matrix. We do this by multiplying the term frequency (in this case, count of words in documents) by an inverse document frequncy (IDF) vector. textmineR calculates IDF for the <span class="math inline">\(i\)</span>-th word as</p>
+<p>First, we must re-weight the word counts in the document term matrix. We do this by multiplying the term frequency (in this case, count of words in documents) by an inverse document frequency (IDF) vector. textmineR calculates IDF for the <span class="math inline">\(i\)</span>-th word as</p>
 <span class="math display">\[\begin{align}
   IDF_i = ln\big(\frac{N}{\sum_{j = 1}^N C(word_i, doc_j)}\big)
 \end{align}\]</span>

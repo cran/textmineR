@@ -1,53 +1,55 @@
 ## ----setup, include = FALSE----------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>", warning = FALSE
+  comment = "#>"
 )
 
 ## ------------------------------------------------------------------------
 library(textmineR)
 
-# load movie_review dataset from text2vec
-data(movie_review, package = "text2vec")
+# load nih_sample data set from textmineR
+data(nih_sample)
 
-str(movie_review)
-
-# let's take a sample so the demo will run quickly
-# note: textmineR is generally quite scaleable, depending on your system
-set.seed(123)
-s <- sample(1:nrow(movie_review), 500)
-
-movie_review <- movie_review[ s , ]
+str(nih_sample)
 
 # create a document term matrix 
-dtm <- CreateDtm(doc_vec = movie_review$review, # character vector of documents
-                 doc_names = movie_review$id, # document names
+dtm <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT, # character vector of documents
+                 doc_names = nih_sample$APPLICATION_ID, # document names
                  ngram_window = c(1, 2), # minimum and maximum n-gram length
-                 stopword_vec = c(tm::stopwords("english"), # stopwords from tm
-                                  tm::stopwords("SMART")), # this is the default value
+                 stopword_vec = c(stopwords::stopwords("en"), # stopwords from tm
+                                  stopwords::stopwords(source = "smart")), # this is the default value
                  lower = TRUE, # lowercase - this is the default value
                  remove_punctuation = TRUE, # punctuation - this is the default
                  remove_numbers = TRUE, # numbers - this is the default
                  verbose = FALSE, # Turn off status bar for this demo
                  cpus = 2) # default is all available cpus on the system
 
+dtm <- dtm[,colSums(dtm) > 2]
+
+
 ## ------------------------------------------------------------------------
 
 # Fit a Latent Dirichlet Allocation model
 # note the number of topics is arbitrary here
 # see extensions for more info
+
+set.seed(12345)
+
 model <- FitLdaModel(dtm = dtm, 
-                     k = 100, 
-                     iterations = 200, # i recommend a larger value, 500 or more
-                     alpha = 0.1, # this is the default value
-                     beta = 0.05, # this is the default value
+                     k = 20,
+                     iterations = 200, # I usually recommend at least 500 iterations or more
+                     burnin = 180,
+                     alpha = 0.1,
+                     beta = 0.05,
+                     optimize_alpha = TRUE,
+                     calc_likelihood = TRUE,
+                     calc_coherence = TRUE,
+                     calc_r2 = TRUE,
                      cpus = 2) 
 
 
 ## ------------------------------------------------------------------------
-# two matrices: 
-# theta = P(topic | document)
-# phi = P(word | topic)
+
 str(model)
 
 
@@ -55,27 +57,14 @@ str(model)
 
 # R-squared 
 # - only works for probabilistic models like LDA and CTM
-model$r2 <- CalcTopicModelR2(dtm = dtm, 
-                             phi = model$phi,
-                             theta = model$theta,
-                             cpus = 2)
-
 model$r2
 
 # log Likelihood (does not consider the prior) 
-# - only works for probabilistic models like LDA and CTM
-model$ll <- CalcLikelihood(dtm = dtm, 
-                           phi = model$phi, 
-                           theta = model$theta,
-                           cpus = 2)
-
-model$ll
+plot(model$log_likelihood, type = "l")
 
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
 # probabilistic coherence, a measure of topic quality
 # this measure can be used with any topic model, not just probabilistic ones
-model$coherence <- CalcProbCoherence(phi = model$phi, dtm = dtm, M = 5)
-
 summary(model$coherence)
 
 hist(model$coherence, 
@@ -98,6 +87,9 @@ knitr::kable(head(t(model$top_terms)),
 # You can make this discrete by applying a threshold, say 0.05, for
 # topics in/out of docuemnts. 
 model$prevalence <- colSums(model$theta) / sum(model$theta) * 100
+
+# prevalence should be proportional to alpha
+plot(model$prevalence, model$alpha, xlab = "prevalence", ylab = "alpha")
 
 # textmineR has a naive topic labeling tool based on probable bigrams
 model$labels <- LabelTopics(assignments = model$theta > 0.05, 
@@ -124,33 +116,25 @@ model$summary <- data.frame(topic = rownames(model$phi),
 knitr::kable(model$summary[ order(model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most prevalent topics")
 
 
-## ------------------------------------------------------------------------
-
-# first get a prediction matrix, phi is P(word | topic)
-# we need P(topic | word), or "phi_prime"
-model$phi_prime <- CalcPhiPrime(phi = model$phi,
-                                theta = model$theta)
-
-# set up the assignments matrix and a simple dot product gives us predictions
-assignments <- dtm / rowSums(dtm)
-
-assignments <- assignments %*% t(model$phi_prime)
-
-assignments <- as.matrix(assignments) # convert to regular R dense matrix
-
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
-# compare the "fit" assignments to the predicted ones
-barplot(rbind(model$theta[ rownames(dtm)[ 1 ] , ],
-              assignments[ rownames(dtm)[ 1 ] , ]), 
-        las = 2,
-        main = "Comparing topic assignments",
-        beside = TRUE,
-        col = c("red", "blue"))
 
-legend("topleft", 
-       legend = c("Bayesian (during fitting)", "Frequentist (predicted)"),
+# predictions with gibbs
+assignments <- predict(model, dtm,
+                       method = "gibbs", 
+                       iterations = 200,
+                       burnin = 180,
+                       cpus = 2)
+
+# predictions with dot
+assignments_dot <- predict(model, dtm,
+                           method = "dot")
+
+
+# compare
+barplot(rbind(assignments[10,], assignments_dot[10,]),
+        col = c("red", "blue"), las = 2, beside = TRUE)
+legend("topright", legend = c("gibbs", "dot"), col = c("red", "blue"), 
        fill = c("red", "blue"))
-
 
 ## ------------------------------------------------------------------------
 
@@ -169,16 +153,18 @@ tf_idf <- t(tf_idf)
 lsa_model <- FitLsaModel(dtm = tf_idf, 
                      k = 100)
 
-# three objects: 
+# objects: 
+# sv = a vector of singular values created with SVD
 # theta = distribution of topics over documents
 # phi = distribution of words over topics
-# sv = a vector of singular values created with SVD
+# gamma = predition matrix, distribution of topics over words
+# coherence = coherence of each topic
+# data = data used to train model
 str(lsa_model)
 
 ## ----fig.width = 7.5, fig.height = 4-------------------------------------
 # probabilistic coherence, a measure of topic quality
 # - can be used with any topic lsa_model, e.g. LSA
-lsa_model$coherence <- CalcProbCoherence(phi = lsa_model$phi, dtm = dtm, M = 5)
 
 summary(lsa_model$coherence)
 
@@ -235,19 +221,12 @@ knitr::kable(lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing =
 ## ------------------------------------------------------------------------
 # Get topic predictions for all 5,000 documents
 
-# first get a prediction matrix,
-lsa_model$phi_prime <- diag(lsa_model$sv) %*% lsa_model$phi
-
-lsa_model$phi_prime <- t(MASS::ginv(lsa_model$phi_prime))
-
 # set up the assignments matrix and a simple dot product gives us predictions
 lsa_assignments <- t(dtm) * tf_sample$idf
 
 lsa_assignments <- t(lsa_assignments)
 
-lsa_assignments <- lsa_assignments %*% t(lsa_model$phi_prime)
-
-lsa_assignments <- as.matrix(lsa_assignments) # convert to regular R dense matrix
+lsa_assignments <- predict(lsa_model, lsa_assignments)
 
 
 
@@ -271,7 +250,7 @@ data(nih_sample_dtm)
 
 # choose a range of k 
 # - here, the range runs into the corpus size. Not recommended for large corpora!
-k_list <- seq(5, 95, by = 5)
+k_list <- seq(10,85, by=15)
 
 # you may want toset up a temporary directory to store fit models so you get 
 # partial results if the process fails or times out. This is a trivial example, 
@@ -288,13 +267,18 @@ model_list <- TmParallelApply(X = k_list, FUN = function(k){
   m <- FitLdaModel(dtm = nih_sample_dtm, 
                    k = k, 
                    iterations = 200, 
+                   burnin = 180,
+                   alpha = 0.1,
+                   beta = colSums(nih_sample_dtm) / sum(nih_sample_dtm) * 100,
+                   optimize_alpha = TRUE,
+                   calc_likelihood = FALSE,
+                   calc_coherence = TRUE,
+                   calc_r2 = FALSE,
                    cpus = 1)
   m$k <- k
-  m$coherence <- CalcProbCoherence(phi = m$phi, 
-                                   dtm = nih_sample_dtm, 
-                                   M = 5)
+  
   m
-}, export=c("nih_sample_dtm"), # export only needed for Windows machines
+}, export= ls(), # c("nih_sample_dtm"), # export only needed for Windows machines
 cpus = 2) 
 
 # Get average coherence for each model
