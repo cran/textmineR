@@ -222,7 +222,7 @@ knitr::kable(lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing =
 # Get topic predictions for all 5,000 documents
 
 # set up the assignments matrix and a simple dot product gives us predictions
-lsa_assignments <- t(dtm) * tf_sample$idf
+lsa_assignments <- t(dtm / rowSums(dtm)) * tf_sample$idf
 
 lsa_assignments <- t(lsa_assignments)
 

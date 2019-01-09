@@ -12,14 +12,14 @@
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2018-10-31" />
+<meta name="date" content="2019-01-09" />
 
 <title></title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -55,7 +55,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -72,7 +94,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Document summarization</li>
 </ol></h1>
 <h4 class="author"><em>Thomas W. Jones</em></h4>
-<h4 class="date"><em>2018-10-31</em></h4>
+<h4 class="date"><em>2019-01-09</em></h4>
 
 
 
@@ -204,7 +226,7 @@ summarizer &lt;-<span class="st"> </span><span class="cf">function</span>(doc, g
   <span class="kw">names</span>(sent) &lt;-<span class="st"> </span><span class="kw">seq_along</span>(sent) <span class="co"># so we know index and order</span>
   
   <span class="co"># embed the sentences in the model</span>
-  e &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(sent, <span class="dt">ngram_window =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">verbose =</span> <span class="ot">FALSE</span>)
+  e &lt;-<span class="st"> </span><span class="kw">CreateDtm</span>(sent, <span class="dt">ngram_window =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">cpus =</span> <span class="dv">2</span>)
   
   <span class="co"># remove any documents with 2 or fewer words</span>
   e &lt;-<span class="st"> </span>e[ <span class="kw">rowSums</span>(e) <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span> , ]
