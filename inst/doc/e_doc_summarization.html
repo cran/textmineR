@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2019-04-17" />
+<meta name="date" content="2021-06-27" />
 
 <title>5. Document summarization</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -96,7 +112,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -117,9 +134,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +302,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +318,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">5. Document summarization</h1>
 <h4 class="author">Thomas W. Jones</h4>
-<h4 class="date">2019-04-17</h4>
+<h4 class="date">2021-06-27</h4>
 
 
 
@@ -486,15 +501,18 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb8-5" data-line-number="5">sums &lt;-<span class="st"> </span><span class="kw">summarizer</span>(docs, <span class="dt">gamma =</span> embeddings<span class="op">$</span>gamma)</a>
 <a class="sourceLine" id="cb8-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb8-7" data-line-number="7">sums</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            2595_9 </span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; &quot;Brilliant adaptation of the largely interior monologues of Leopold Bloom, Stephen Dedalus, and Molly Bloom by Joseph Strick in recreating the endearing portrait of Dublin on June 16, 1904 - Bloomsday - a day to be celebrated - double entendre intended!  Bravo director Strick, screenwriter Haines, as well as casting director and cinematographer in creating this masterpiece.  Gunter Grass' novel, The Tin Drum filmed by Volker Schlndorff (1979)is another fine film adaptation of interior monologue which I favorably compare with Strick's film.While there are clearly recognized Dublin landmarks in the original novel and in the film, there are also recognizable characters, although with different names in the novel. &quot; </span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            8892_2 </span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              &quot;I would have poured it in her mouth to shut her up!  Anthony Andrews...yikes!  And don't get me started on Romeo...puhleasssssee! &quot; </span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            8620_8 </span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                    &quot;Blues, Country/Folk and Rock Ballads do not belong here and every time they are used we all broke out in laughter.  There are many uses of silence as well as slow-motion photography that work beautifully.  I really wish I could erase the music but alas.Seek this out. &quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 4273_1 </span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; &quot;And being introduced to some of the most mind numbing shady immoral character of the Twin Peaks.To the Mind numbing almost pedophilia disgusting way the movie seems to romantically tell of the destruction of a Human Life through some random psychedelic phenomena in the Movie Twin Peak:Fire Come Walk with me.  Save your self the agony the suspense and watch anything else that at least has the ability to tell a story, rather then seduce you into some kind mental porn movie.I have heard a lot of reviews, rants and raves about how great David Lynch.  Because of his ability to define misery and and tragedy and making it into some kind of a wonderful thing. &quot; </span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 7112_4 </span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                         &quot;Now there isn't much to recommend it, other than the inherent camp value of actors being \\\&quot;terrified\\\&quot; by replicas of human skulls.  It definitely inspires more laughs than screams, however.  Just try not to get the giggles when the wife (who does more than her share of screaming) goes into the greenhouse and is confronted with the ghost of her husband's ex.&quot; </span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1891_3 </span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;                                                                                                                                                                                                                                                                                              &quot;Documentary about nomadic Persians making a treacherous traverse of massive mountains to get their herds to grass.  The spectacular scenery is lost on a small black and white screen, and there is an utter failure to establish any kind of plot line.  I loved Nanook of the North and March of the Penguins, but despised this movie, notwithstanding the similarity of the theme. &quot;</span></a></code></pre></div>
 <p>Compare that to the whole reviews yourself.</p>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

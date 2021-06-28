@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2019-04-17" />
+<meta name="date" content="2021-06-27" />
 
 <title>4. Text embeddings</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -96,7 +112,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -117,9 +134,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +302,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +318,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">4. Text embeddings</h1>
 <h4 class="author">Thomas W. Jones</h4>
-<h4 class="date">2019-04-17</h4>
+<h4 class="date">2021-06-27</h4>
 
 
 
@@ -361,12 +376,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>As it happens, the same evaluation metrics developed for topic modeling also apply here. There are subtle differences in interpretation because we are using a TCM not a DTM. i.e. occurrences relate words to each other, not to documents.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Get an R-squared for general goodness of fit</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">embeddings<span class="op">$</span>r2</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1] 0.1746546</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1] 0.1774482</span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co"># Get coherence (relative to the TCM) for goodness of fit</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">summary</span>(embeddings<span class="op">$</span>coherence)</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;  0.0119  0.0731  0.1121  0.1280  0.1750  0.3218</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 0.01242 0.06924 0.10976 0.11906 0.15322 0.35695</span></a></code></pre></div>
 <p>We will create a summary table as we did with a topic model before.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># Get top terms, no labels because we don't have bigrams</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">embeddings<span class="op">$</span>top_terms &lt;-<span class="st"> </span><span class="kw">GetTopTerms</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi,</a>
@@ -385,7 +400,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Summary of top 10 embedding dimensions</caption>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">topic</th>
 <th align="right">coherence</th>
 <th align="right">prevalence</th>
@@ -394,74 +409,74 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>t_22</td>
-<td align="left">t_22</td>
+<td align="left">t_9</td>
+<td align="left">t_9</td>
+<td align="right">0.154</td>
+<td align="right">184.30</td>
+<td align="left">research, health, cancer, clinical, core</td>
+</tr>
+<tr class="even">
+<td align="left">t_43</td>
+<td align="left">t_43</td>
 <td align="right">0.218</td>
-<td align="right">184.11</td>
+<td align="right">153.29</td>
 <td align="left">aim, specific, study, determine, studies</td>
 </tr>
-<tr class="even">
-<td>t_41</td>
-<td align="left">t_41</td>
-<td align="right">0.178</td>
-<td align="right">158.86</td>
-<td align="left">research, health, cancer, clinical, development</td>
-</tr>
 <tr class="odd">
-<td>t_21</td>
-<td align="left">t_21</td>
-<td align="right">0.209</td>
-<td align="right">146.48</td>
-<td align="left">core, research, program, support, training</td>
+<td align="left">t_46</td>
+<td align="left">t_46</td>
+<td align="right">0.193</td>
+<td align="right">151.00</td>
+<td align="left">cells, cell, brain, human, cancer</td>
 </tr>
 <tr class="even">
-<td>t_45</td>
-<td align="left">t_45</td>
-<td align="right">0.181</td>
-<td align="right">123.89</td>
-<td align="left">cells, cell, human, function, signaling</td>
-</tr>
-<tr class="odd">
-<td>t_17</td>
-<td align="left">t_17</td>
-<td align="right">0.135</td>
-<td align="right">118.94</td>
-<td align="left">based, treatment, design, effect, development</td>
-</tr>
-<tr class="even">
-<td>t_14</td>
-<td align="left">t_14</td>
+<td align="left">t_42</td>
+<td align="left">t_42</td>
 <td align="right">0.136</td>
-<td align="right">113.22</td>
-<td align="left">factors, risk, early, social, sud</td>
+<td align="right">134.75</td>
+<td align="left">program, core, support, national, investigators</td>
 </tr>
 <tr class="odd">
-<td>t_16</td>
-<td align="left">t_16</td>
-<td align="right">0.149</td>
-<td align="right">110.60</td>
-<td align="left">role, mechanisms, gene, critical, genetic</td>
+<td align="left">t_6</td>
+<td align="left">t_6</td>
+<td align="right">0.173</td>
+<td align="right">124.75</td>
+<td align="left">hiv, based, treatment, clinical, effect</td>
 </tr>
 <tr class="even">
-<td>t_43</td>
-<td align="left">t_43</td>
-<td align="right">0.195</td>
-<td align="right">110.52</td>
-<td align="left">brain, cancer, tumor, cells, patients</td>
+<td align="left">t_24</td>
+<td align="left">t_24</td>
+<td align="right">0.146</td>
+<td align="right">120.00</td>
+<td align="left">role, genetic, mechanisms, gene, expression</td>
 </tr>
 <tr class="odd">
-<td>t_49</td>
-<td align="left">t_49</td>
-<td align="right">0.144</td>
-<td align="right">109.38</td>
-<td align="left">response, tissue, responses, immune, host</td>
+<td align="left">t_45</td>
+<td align="left">t_45</td>
+<td align="right">0.136</td>
+<td align="right">113.39</td>
+<td align="left">data, studies, time, design, development</td>
 </tr>
 <tr class="even">
-<td>t_19</td>
-<td align="left">t_19</td>
-<td align="right">0.062</td>
-<td align="right">107.02</td>
-<td align="left">high, imaging, metastases, vivo, modified</td>
+<td align="left">t_7</td>
+<td align="left">t_7</td>
+<td align="right">0.118</td>
+<td align="right">112.90</td>
+<td align="left">factors, risk, early, sud, behavioral</td>
+</tr>
+<tr class="odd">
+<td align="left">t_33</td>
+<td align="left">t_33</td>
+<td align="right">0.190</td>
+<td align="right">108.51</td>
+<td align="left">signaling, ri, mediated, fc, dependent</td>
+</tr>
+<tr class="even">
+<td align="left">t_39</td>
+<td align="left">t_39</td>
+<td align="right">0.147</td>
+<td align="right">107.31</td>
+<td align="left">response, immune, infection, proteins, sand</td>
 </tr>
 </tbody>
 </table>
@@ -471,7 +486,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Summary of 10 most coherent embedding dimensions</caption>
 <thead>
 <tr class="header">
-<th></th>
+<th align="left"></th>
 <th align="left">topic</th>
 <th align="right">coherence</th>
 <th align="right">prevalence</th>
@@ -480,74 +495,74 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>t_31</td>
-<td align="left">t_31</td>
-<td align="right">0.322</td>
-<td align="right">95.70</td>
-<td align="left">provided, applicant, project, patients, description</td>
-</tr>
-<tr class="even">
-<td>t_46</td>
-<td align="left">t_46</td>
-<td align="right">0.283</td>
-<td align="right">101.39</td>
-<td align="left">proteins, fly, cutaneous, infection, response</td>
-</tr>
-<tr class="odd">
-<td>t_34</td>
-<td align="left">t_34</td>
-<td align="right">0.278</td>
-<td align="right">98.03</td>
-<td align="left">microbiome, gut, composition, crc, bas</td>
-</tr>
-<tr class="even">
-<td>t_25</td>
-<td align="left">t_25</td>
-<td align="right">0.238</td>
-<td align="right">97.01</td>
-<td align="left">carbon, pathways, environment, intracellular, metabolism</td>
-</tr>
-<tr class="odd">
-<td>t_5</td>
-<td align="left">t_5</td>
-<td align="right">0.221</td>
-<td align="right">101.74</td>
-<td align="left">fertility, ethnic, race, knowledge, force</td>
-</tr>
-<tr class="even">
-<td>t_22</td>
 <td align="left">t_22</td>
+<td align="left">t_22</td>
+<td align="right">0.357</td>
+<td align="right">95.64</td>
+<td align="left">race, fertility, ethnic, differences, unintended</td>
+</tr>
+<tr class="even">
+<td align="left">t_3</td>
+<td align="left">t_3</td>
+<td align="right">0.284</td>
+<td align="right">100.41</td>
+<td align="left">microbiome, gut, crc, composition, bas</td>
+</tr>
+<tr class="odd">
+<td align="left">t_34</td>
+<td align="left">t_34</td>
+<td align="right">0.259</td>
+<td align="right">100.42</td>
+<td align="left">secondary, ptc, brafv, drug, primary</td>
+</tr>
+<tr class="even">
+<td align="left">t_50</td>
+<td align="left">t_50</td>
+<td align="right">0.221</td>
+<td align="right">104.79</td>
+<td align="left">sleep, cdk, memory, dependent, activity</td>
+</tr>
+<tr class="odd">
+<td align="left">t_43</td>
+<td align="left">t_43</td>
 <td align="right">0.218</td>
-<td align="right">184.11</td>
+<td align="right">153.29</td>
 <td align="left">aim, specific, study, determine, studies</td>
 </tr>
-<tr class="odd">
-<td>t_38</td>
-<td align="left">t_38</td>
-<td align="right">0.210</td>
-<td align="right">99.11</td>
-<td align="left">sleep, dependent, memory, cognitive, reduced</td>
-</tr>
 <tr class="even">
-<td>t_21</td>
-<td align="left">t_21</td>
-<td align="right">0.209</td>
-<td align="right">146.48</td>
-<td align="left">core, research, program, support, training</td>
+<td align="left">t_35</td>
+<td align="left">t_35</td>
+<td align="right">0.212</td>
+<td align="right">100.74</td>
+<td align="left">mice, injury, cmybp, blood, fragment</td>
 </tr>
 <tr class="odd">
-<td>t_15</td>
-<td align="left">t_15</td>
-<td align="right">0.203</td>
-<td align="right">100.98</td>
-<td align="left">lung, expression, ipf, patients, key</td>
+<td align="left">t_46</td>
+<td align="left">t_46</td>
+<td align="right">0.193</td>
+<td align="right">151.00</td>
+<td align="left">cells, cell, brain, human, cancer</td>
 </tr>
 <tr class="even">
-<td>t_50</td>
-<td align="left">t_50</td>
-<td align="right">0.200</td>
-<td align="right">104.31</td>
-<td align="left">ri, ptc, fc, pathways, brafv</td>
+<td align="left">t_33</td>
+<td align="left">t_33</td>
+<td align="right">0.190</td>
+<td align="right">108.51</td>
+<td align="left">signaling, ri, mediated, fc, dependent</td>
+</tr>
+<tr class="odd">
+<td align="left">t_23</td>
+<td align="left">t_23</td>
+<td align="right">0.189</td>
+<td align="right">98.87</td>
+<td align="left">lung, ipf, behavior, patients, expression</td>
+</tr>
+<tr class="even">
+<td align="left">t_26</td>
+<td align="left">t_26</td>
+<td align="right">0.182</td>
+<td align="right">97.91</td>
+<td align="left">metabolic, mitochondrial, secretion, bde, redox</td>
 </tr>
 </tbody>
 </table>
@@ -568,7 +583,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co"># Project the documents into the embedding space</span></a>
 <a class="sourceLine" id="cb8-11" data-line-number="11">embedding_assignments &lt;-<span class="st"> </span><span class="kw">predict</span>(embeddings, dtm_embed, <span class="dt">method =</span> <span class="st">&quot;gibbs&quot;</span>,</a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">                                 <span class="dt">iterations =</span> <span class="dv">200</span>, <span class="dt">burnin =</span> <span class="dv">180</span>)</a></code></pre></div>
-<p>Once you’ve embedded your documents, you effectively have a new <span class="math inline">\(\Theta\)</span>. We can use that to evaluate how well the embedding topics fit the documents as a whole by re-calculatingR-squared and coherence.</p>
+<p>Once you’ve embedded your documents, you effectively have a new <span class="math inline">\(\Theta\)</span>. We can use that to evaluate how well the embedding topics fit the documents as a whole by re-calculating R-squared and coherence.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># get a goodness of fit relative to the DTM</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">embeddings<span class="op">$</span>r2_dtm &lt;-<span class="st"> </span><span class="kw">CalcTopicModelR2</span>(<span class="dt">dtm =</span> dtm_embed, </a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">                                      <span class="dt">phi =</span> embeddings<span class="op">$</span>phi[,<span class="kw">colnames</span>(dtm_embed)], <span class="co"># line up vocabulary</span></a>
@@ -576,15 +591,15 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb9-5" data-line-number="5">                                      <span class="dt">cpus =</span> <span class="dv">2</span>)</a>
 <a class="sourceLine" id="cb9-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">embeddings<span class="op">$</span>r2_dtm</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; [1] 0.2298521</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; [1] 0.2134098</span></a>
 <a class="sourceLine" id="cb9-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co"># get coherence relative to DTM</span></a>
 <a class="sourceLine" id="cb9-11" data-line-number="11">embeddings<span class="op">$</span>coherence_dtm &lt;-<span class="st"> </span><span class="kw">CalcProbCoherence</span>(<span class="dt">phi =</span> embeddings<span class="op">$</span>phi[,<span class="kw">colnames</span>(dtm_embed)], <span class="co"># line up vocabulary</span></a>
 <a class="sourceLine" id="cb9-12" data-line-number="12">                                              <span class="dt">dtm =</span> dtm_embed)</a>
 <a class="sourceLine" id="cb9-13" data-line-number="13"></a>
 <a class="sourceLine" id="cb9-14" data-line-number="14"><span class="kw">summary</span>(embeddings<span class="op">$</span>coherence_dtm)</a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; 0.02284 0.07596 0.11879 0.15447 0.20744 0.40667</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; -0.01454  0.03715  0.08847  0.12319  0.17537  0.52295</span></a></code></pre></div>
 </div>
 <div id="where-to-next" class="section level2">
 <h2>Where to next?</h2>
@@ -592,6 +607,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -18,7 +18,7 @@ posterior <- function(object, ...) UseMethod("posterior")
 #' Draw from the posterior of an LDA topic model
 #' @description This function takes an object of class \code{lda_topic_model} and
 #' draws samples from the posterior of either \code{phi} or \code{theta}. This is 
-#' useful for quantifying uncertainty around parametrs of the final model.
+#' useful for quantifying uncertainty around parametersof the final model.
 #' @param object An object of class \code{lda_topic_model}
 #' @param which A character of either 'theta' or 'phi', indicating from which
 #' matrix to draw posterior samples
@@ -285,10 +285,15 @@ Cluster2TopicModel <- function(dtm, clustering, ...){
 #'        after the model is trained? Defaults to \code{TRUE}. 
 #' @param calc_r2 Do you want to calculate R-squared after the model is trained?
 #'        Defaults to \code{FALSE}.
-#' @param ... Other arguments to pass to \link[topicmodels]{CTM} or \link[textmineR]{TmParallelApply}. 
+#' @param ... Other arguments to pass to \link[topicmodels]{CTM} or \link[textmineR]{TmParallelApply}.
+#'   See note below.
 #' @return Returns a list with a minimum of two objects, \code{phi} and 
 #' \code{theta}. The rows of \code{phi} index topics and the columns index tokens.
 #' The rows of \code{theta} index documents and the columns index topics.
+#' @note 
+#' When passing additional arguments to \link[topicmodels]{CTM}, you must unlist the 
+#' elements in the \code{control} argument and pass them one by one. See examples for
+#' how to dot this correctly.
 #' @examples
 #' # Load a pre-formatted dtm 
 #' data(nih_sample_dtm) 
@@ -296,6 +301,29 @@ Cluster2TopicModel <- function(dtm, clustering, ...){
 #' # Fit a CTM model on a sample of documents
 #' model <- FitCtmModel(dtm = nih_sample_dtm[ sample(1:nrow(nih_sample_dtm) , 10) , ], 
 #'                      k = 3, return_all = FALSE)
+#'                      
+#' # the correct way to pass control arguments to CTM
+#' \dontrun{
+#' topics_CTM <- FitCtmModel(
+#'     dtm = nih_sample_dtm[ sample(1:nrow(nih_sample_dtm) , 10) , ],
+#'     k = 10,
+#'     calc_coherence = TRUE,
+#'     calc_r2 = TRUE,
+#'     return_all = TRUE,
+#'     estimate.beta = TRUE,
+#'     verbose = 0,
+#'     prefix = tempfile(),
+#'     save = 0,
+#'     keep = 0,
+#'     seed = as.integer(Sys.time()),
+#'     nstart = 1L,
+#'     best = TRUE,
+#'     var = list(iter.max = 500, tol = 10^-6),
+#'     em = list(iter.max = 1000, tol = 10^-4),
+#'     initialize = "random",
+#'     cg = list(iter.max = 500, tol = 10^-5)
+#' )
+#' }
 #' @export
 FitCtmModel <- function(dtm, k, calc_coherence = TRUE, 
                         calc_r2 = FALSE, return_all = TRUE, ...){

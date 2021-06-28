@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2019-04-17" />
+<meta name="date" content="2021-06-27" />
 
 <title>6. Using tidytext with textmineR</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -96,7 +112,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -117,9 +134,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +302,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +318,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">6. Using tidytext with textmineR</h1>
 <h4 class="author">Thomas W. Jones</h4>
-<h4 class="date">2019-04-17</h4>
+<h4 class="date">2021-06-27</h4>
 
 
 
@@ -337,9 +352,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt; The following object is masked from 'package:igraph':</span></a>
 <a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co">#&gt;     crossing</span></a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt; The following object is masked from 'package:Matrix':</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt; The following objects are masked from 'package:Matrix':</span></a>
 <a class="sourceLine" id="cb1-26" data-line-number="26"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-27" data-line-number="27"><span class="co">#&gt;     expand</span></a>
+<a class="sourceLine" id="cb1-27" data-line-number="27"><span class="co">#&gt;     expand, pack, unpack</span></a>
 <a class="sourceLine" id="cb1-28" data-line-number="28"></a>
 <a class="sourceLine" id="cb1-29" data-line-number="29"><span class="co"># load documents in a data frame</span></a>
 <a class="sourceLine" id="cb1-30" data-line-number="30">docs &lt;-<span class="st"> </span>textmineR<span class="op">::</span>nih_sample </a>
@@ -386,6 +401,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-71" data-line-number="71"><span class="st">  </span>tibble<span class="op">::</span><span class="kw">as_tibble</span>()</a></code></pre></div>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Thomas W. Jones" />
 
-<meta name="date" content="2019-04-17" />
+<meta name="date" content="2021-06-27" />
 
 <title>1. Start here</title>
 
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
@@ -96,7 +112,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -104,6 +120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -117,9 +134,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -288,7 +302,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -303,7 +318,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">1. Start here</h1>
 <h4 class="author">Thomas W. Jones</h4>
-<h4 class="date">2019-04-17</h4>
+<h4 class="date">2021-06-27</h4>
 
 
 
@@ -319,7 +334,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>textmineR strives for maximum interoperability in three ways. First, it uses the <code>dgCMatrix</code> class from the popular <a href="https://CRAN.R-project.org/package=Matrix"><code>Matrix</code> package</a> for document term matrices (DTMs) and term co-occurrence matrices (TCMs). The <code>Matrix</code> package is an R “recommended” package with nearly 500 packages that depend, import, or suggest it. Compare that to the <a href="https://CRAN.R-project.org/package=slam"><code>slam</code> package</a> used by <a href="https://CRAN.R-project.org/package=tm"><code>tm</code></a> and its derivatives. <code>slam</code> has an order of magnitude fewer dependents. It is simply not as well integrated. <code>Matrix</code> also has methods that make the syntax for manipulating its matrices nearly identical to base R. This greatly reduces the cognitive burden of the programmers.</p>
 <p>Second, textmineR relies on base R objects for corpus and metadata storage. Actually, it relies on the user to do so. textmineR’s core functions <code>CreateDtm</code> and <code>CreateTcm</code> take a simple character vector as input. Users may store their corpora as character vectors, lists, or data frames. <em>There is no need to learn a new <a href="https://CRAN.R-project.org/package=tm">‘Corpus’</a> class.</em></p>
 <p>Third and last, textmineR represents the output of topic models in a consistent way, a list containing two matrices. This is described in more detail in the next section. Several topic models are supported and the simple representation means that textmineR’s utility functions are usable with outputs from other packages, so long as they are represented as matrices of probabilities. (Again, see the next section for more detail.)</p>
-<p>textmineR achieves scalability through three means. First, sparse matrices (like the <code>dgCMatrix</code>) offer significant memory savings. Second, textmineR utilizes <code>Rcpp</code> throughout for speedup. Finally, textmineR uses parallel processing by default where possible. textmineR offers a function <code>TmParallelApply</code> which implements a framework for parallel processing that is syntactically agnostic between Windows and Unix-like operating systems. <code>TmParallelApply</code> is used liberally within textmineR and is exposed for users.</p>
+<p>textmineR achieves scaleability through three means. First, sparse matrices (like the <code>dgCMatrix</code>) offer significant memory savings. Second, textmineR utilizes <code>Rcpp</code> throughout for speedup. Finally, textmineR uses parallel processing by default where possible. textmineR offers a function <code>TmParallelApply</code> which implements a framework for parallel processing that is syntactically agnostic between Windows and Unix-like operating systems. <code>TmParallelApply</code> is used liberally within textmineR and is exposed for users.</p>
 <p>textmineR does make some tradeoffs of performance for syntactic simplicity. textmineR is designed to run on a single node in a cluster computing environment. It can (and will by default) use all available cores of that node. If performance is your number one concern, see <a href="https://CRAN.R-project.org/package=text2vec"><code>text2vec</code></a>. textmineR uses some <code>text2vec</code> under the hood.</p>
 <p>textmineR strives for syntax that is idiomatic to R. This is, admittedly, a nebulous concept. textmineR does not create new classes where existing R classes exist. It strives for a functional programming paradigm. And it attempts to group closely-related sequential steps into single functions. This means that users will not have to make several temporary objects along the way. As an example, compare making a document term matrix in textmineR (example below) with <code>tm</code> or <code>text2vec</code>.</p>
 <p>As a side note: textmineR’s framework for NLP does not need to be exclusive to textmineR. Text mining packages in R can be interoperable with a few concepts. First, use <code>dgCMatrix</code> for DTMs and TCMs. Second, write most text mining models in a way that they can take a <code>dgCMatrix</code> as the input. Finally, keep non-base R classes to a minimum, especially for corpus and metadata management.</p>
@@ -371,16 +386,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-38" data-line-number="38">                 <span class="dt">cpus =</span> <span class="dv">2</span>) <span class="co"># by default, this will be the max number of cpus available</span></a></code></pre></div>
 <p>Even though a <code>dgCMatrix</code> isn’t a traditional matrix, it has methods that make it similar to standard R matrices.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">dim</span>(dtm) </a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; [1]   500 55459</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; [1]   500 56023</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">nrow</span>(dtm) </a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; [1] 500</span></a>
 <a class="sourceLine" id="cb2-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">ncol</span>(dtm) </a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; [1] 55459</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; [1] 56023</span></a></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">colnames</span>(dtm))</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] &quot;making_debut&quot;       &quot;bureau_lowly&quot;       &quot;scenes_thing&quot;      </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [4] &quot;injections&quot;         &quot;frying_pan&quot;         &quot;renounced_assassin&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] &quot;aaa&quot;           &quot;aaa_ball&quot;      &quot;aaaaatch&quot;      &quot;aaaaatch_kah&quot; </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [5] &quot;aage&quot;          &quot;aage_haugland&quot;</span></a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -389,22 +404,22 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">making_debut</td>
+<td align="left">aaa</td>
 </tr>
 <tr class="even">
-<td align="left">bureau_lowly</td>
+<td align="left">aaa_ball</td>
 </tr>
 <tr class="odd">
-<td align="left">scenes_thing</td>
+<td align="left">aaaaatch</td>
 </tr>
 <tr class="even">
-<td align="left">injections</td>
+<td align="left">aaaaatch_kah</td>
 </tr>
 <tr class="odd">
-<td align="left">frying_pan</td>
+<td align="left">aage</td>
 </tr>
 <tr class="even">
-<td align="left">renounced_assassin</td>
+<td align="left">aage_haugland</td>
 </tr>
 </tbody>
 </table>
@@ -417,22 +432,22 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2595_9</td>
+<td align="left">4273_1</td>
 </tr>
 <tr class="even">
-<td align="left">8892_2</td>
+<td align="left">7112_4</td>
 </tr>
 <tr class="odd">
-<td align="left">8620_8</td>
+<td align="left">1891_3</td>
 </tr>
 <tr class="even">
-<td align="left">2892_10</td>
+<td align="left">6252_10</td>
 </tr>
 <tr class="odd">
-<td align="left">232_1</td>
+<td align="left">9929_2</td>
 </tr>
 <tr class="even">
-<td align="left">4364_1</td>
+<td align="left">8970_10</td>
 </tr>
 </tbody>
 </table>
@@ -446,18 +461,17 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb5-3" data-line-number="3">tf_mat &lt;-<span class="st"> </span><span class="kw">TermDocFreq</span>(<span class="dt">dtm =</span> dtm)</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw">str</span>(tf_mat) </a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; 'data.frame':    55459 obs. of  4 variables:</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;  $ term     : chr  &quot;making_debut&quot; &quot;bureau_lowly&quot; &quot;scenes_thing&quot; &quot;injections&quot; ...</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  $ term_freq: num  1 1 1 1 1 1 1 1 1 1 ...</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  $ doc_freq : int  1 1 1 1 1 1 1 1 1 1 ...</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  $ idf      : num  6.21 6.21 6.21 6.21 6.21 ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; tibble [56,023 × 4] (S3: tbl_df/tbl/data.frame)</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt;  $ term     : chr [1:56023] &quot;aaa&quot; &quot;aaa_ball&quot; &quot;aaaaatch&quot; &quot;aaaaatch_kah&quot; ...</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt;  $ term_freq: num [1:56023] 1 1 1 1 1 1 1 1 1 1 ...</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;  $ doc_freq : int [1:56023] 1 1 1 1 1 1 1 1 1 1 ...</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  $ idf      : num [1:56023] 6.21 6.21 6.21 6.21 6.21 ...</span></a></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># look at the most frequent tokens</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">head</span>(tf_mat[ <span class="kw">order</span>(tf_mat<span class="op">$</span>term_freq, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>) , ], <span class="dv">10</span>)</a></code></pre></div>
 <table>
 <caption>Ten most frequent tokens</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -466,74 +480,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>br</td>
 <td align="left">br</td>
-<td align="right">2148</td>
-<td align="right">312</td>
-<td align="right">0.4716049</td>
+<td align="right">1990</td>
+<td align="right">289</td>
+<td align="right">0.5481814</td>
 </tr>
 <tr class="even">
-<td>br_br</td>
 <td align="left">br_br</td>
-<td align="right">1078</td>
-<td align="right">312</td>
-<td align="right">0.4716049</td>
+<td align="right">999</td>
+<td align="right">289</td>
+<td align="right">0.5481814</td>
 </tr>
 <tr class="odd">
-<td>movie</td>
-<td align="left">movie</td>
-<td align="right">878</td>
-<td align="right">310</td>
-<td align="right">0.4780358</td>
-</tr>
-<tr class="even">
-<td>film</td>
 <td align="left">film</td>
-<td align="right">835</td>
-<td align="right">284</td>
-<td align="right">0.5656339</td>
-</tr>
-<tr class="odd">
-<td>good</td>
-<td align="left">good</td>
-<td align="right">333</td>
-<td align="right">203</td>
-<td align="right">0.9014021</td>
+<td align="right">909</td>
+<td align="right">294</td>
+<td align="right">0.5310283</td>
 </tr>
 <tr class="even">
-<td>story</td>
-<td align="left">story</td>
-<td align="right">277</td>
+<td align="left">movie</td>
+<td align="right">774</td>
+<td align="right">290</td>
+<td align="right">0.5447272</td>
+</tr>
+<tr class="odd">
+<td align="left">good</td>
+<td align="right">337</td>
+<td align="right">209</td>
+<td align="right">0.8722738</td>
+</tr>
+<tr class="even">
+<td align="left">time</td>
+<td align="right">252</td>
 <td align="right">167</td>
 <td align="right">1.0966143</td>
 </tr>
 <tr class="odd">
-<td>time</td>
-<td align="left">time</td>
-<td align="right">271</td>
-<td align="right">180</td>
-<td align="right">1.0216512</td>
+<td align="left">people</td>
+<td align="right">238</td>
+<td align="right">143</td>
+<td align="right">1.2517635</td>
 </tr>
 <tr class="even">
-<td>bad</td>
-<td align="left">bad</td>
-<td align="right">199</td>
-<td align="right">118</td>
-<td align="right">1.4439235</td>
+<td align="left">story</td>
+<td align="right">230</td>
+<td align="right">143</td>
+<td align="right">1.2517635</td>
 </tr>
 <tr class="odd">
-<td>great</td>
 <td align="left">great</td>
-<td align="right">195</td>
-<td align="right">138</td>
-<td align="right">1.2873544</td>
+<td align="right">181</td>
+<td align="right">125</td>
+<td align="right">1.3862944</td>
 </tr>
 <tr class="even">
-<td>made</td>
-<td align="left">made</td>
-<td align="right">173</td>
-<td align="right">137</td>
-<td align="right">1.2946272</td>
+<td align="left">bad</td>
+<td align="right">176</td>
+<td align="right">121</td>
+<td align="right">1.4188176</td>
 </tr>
 </tbody>
 </table>
@@ -544,7 +548,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Ten most frequent bi-grams</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -553,74 +556,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>br_br</td>
 <td align="left">br_br</td>
-<td align="right">1078</td>
-<td align="right">312</td>
-<td align="right">0.4716049</td>
+<td align="right">999</td>
+<td align="right">289</td>
+<td align="right">0.5481814</td>
 </tr>
 <tr class="even">
-<td>br_film</td>
 <td align="left">br_film</td>
-<td align="right">48</td>
 <td align="right">41</td>
-<td align="right">2.5010360</td>
+<td align="right">35</td>
+<td align="right">2.6592600</td>
 </tr>
 <tr class="odd">
-<td>br_movie</td>
 <td align="left">br_movie</td>
-<td align="right">41</td>
-<td align="right">36</td>
-<td align="right">2.6310892</td>
+<td align="right">34</td>
+<td align="right">31</td>
+<td align="right">2.7806209</td>
 </tr>
 <tr class="even">
-<td>film_br</td>
-<td align="left">film_br</td>
-<td align="right">32</td>
-<td align="right">26</td>
-<td align="right">2.9565116</td>
-</tr>
-<tr class="odd">
-<td>movie_br</td>
-<td align="left">movie_br</td>
-<td align="right">29</td>
-<td align="right">27</td>
-<td align="right">2.9187712</td>
-</tr>
-<tr class="even">
-<td>special_effects</td>
 <td align="left">special_effects</td>
-<td align="right">21</td>
-<td align="right">19</td>
-<td align="right">3.2701691</td>
+<td align="right">28</td>
+<td align="right">24</td>
+<td align="right">3.0365543</td>
 </tr>
 <tr class="odd">
-<td>good_movie</td>
+<td align="left">film_br</td>
+<td align="right">20</td>
+<td align="right">17</td>
+<td align="right">3.3813948</td>
+</tr>
+<tr class="even">
 <td align="left">good_movie</td>
+<td align="right">18</td>
+<td align="right">17</td>
+<td align="right">3.3813948</td>
+</tr>
+<tr class="odd">
+<td align="left">low_budget</td>
+<td align="right">18</td>
 <td align="right">16</td>
-<td align="right">15</td>
-<td align="right">3.5065579</td>
+<td align="right">3.4420194</td>
 </tr>
 <tr class="even">
-<td>long_time</td>
-<td align="left">long_time</td>
-<td align="right">15</td>
+<td align="left">waste_time</td>
+<td align="right">17</td>
 <td align="right">15</td>
 <td align="right">3.5065579</td>
 </tr>
 <tr class="odd">
-<td>high_school</td>
-<td align="left">high_school</td>
+<td align="left">movie_br</td>
 <td align="right">15</td>
-<td align="right">10</td>
-<td align="right">3.9120230</td>
+<td align="right">15</td>
+<td align="right">3.5065579</td>
 </tr>
 <tr class="even">
-<td>scooby_doo</td>
-<td align="left">scooby_doo</td>
+<td align="left">movie_good</td>
 <td align="right">15</td>
-<td align="right">1</td>
-<td align="right">6.2146081</td>
+<td align="right">14</td>
+<td align="right">3.5755508</td>
 </tr>
 </tbody>
 </table>
@@ -635,22 +628,23 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb9-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb9-8" data-line-number="8">tf_bigrams &lt;-<span class="st"> </span>tf_mat[ stringr<span class="op">::</span><span class="kw">str_detect</span>(tf_mat<span class="op">$</span>term, <span class="st">&quot;_&quot;</span>) , ]</a></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">head</span>(tf_mat[ <span class="kw">order</span>(tf_mat<span class="op">$</span>term_freq, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>) , ], <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;        term term_freq doc_freq       idf</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; movie movie       878      310 0.4780358</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; film   film       835      284 0.5656339</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; good   good       333      203 0.9014021</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt; story story       277      167 1.0966143</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt; time   time       271      180 1.0216512</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt; bad     bad       199      118 1.4439235</span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt; great great       195      138 1.2873544</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt; made   made       173      137 1.2946272</span></a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt; watch watch       158      127 1.3704210</span></a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt; films films       153       93 1.6820086</span></a></code></pre></div>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; # A tibble: 10 x 4</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;    term      term_freq doc_freq   idf</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  1 film            909      294 0.531</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  2 movie           774      290 0.545</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  3 good            337      209 0.872</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  4 time            252      167 1.10 </span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  5 people          238      143 1.25 </span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  6 story           230      143 1.25 </span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  7 great           181      125 1.39 </span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  8 bad             176      121 1.42 </span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  9 made            170      140 1.27 </span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; 10 character       169      108 1.53</span></a></code></pre></div>
 <table>
 <caption>Ten most frequent terms, ‘&lt;br&gt;’ removed</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -659,74 +653,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>movie</td>
-<td align="left">movie</td>
-<td align="right">878</td>
-<td align="right">310</td>
-<td align="right">0.4780358</td>
+<td align="left">film</td>
+<td align="right">909</td>
+<td align="right">294</td>
+<td align="right">0.5310283</td>
 </tr>
 <tr class="even">
-<td>film</td>
-<td align="left">film</td>
-<td align="right">835</td>
-<td align="right">284</td>
-<td align="right">0.5656339</td>
+<td align="left">movie</td>
+<td align="right">774</td>
+<td align="right">290</td>
+<td align="right">0.5447272</td>
 </tr>
 <tr class="odd">
-<td>good</td>
 <td align="left">good</td>
-<td align="right">333</td>
-<td align="right">203</td>
-<td align="right">0.9014021</td>
+<td align="right">337</td>
+<td align="right">209</td>
+<td align="right">0.8722738</td>
 </tr>
 <tr class="even">
-<td>story</td>
-<td align="left">story</td>
-<td align="right">277</td>
+<td align="left">time</td>
+<td align="right">252</td>
 <td align="right">167</td>
 <td align="right">1.0966143</td>
 </tr>
 <tr class="odd">
-<td>time</td>
-<td align="left">time</td>
-<td align="right">271</td>
-<td align="right">180</td>
-<td align="right">1.0216512</td>
+<td align="left">people</td>
+<td align="right">238</td>
+<td align="right">143</td>
+<td align="right">1.2517635</td>
 </tr>
 <tr class="even">
-<td>bad</td>
-<td align="left">bad</td>
-<td align="right">199</td>
-<td align="right">118</td>
-<td align="right">1.4439235</td>
+<td align="left">story</td>
+<td align="right">230</td>
+<td align="right">143</td>
+<td align="right">1.2517635</td>
 </tr>
 <tr class="odd">
-<td>great</td>
 <td align="left">great</td>
-<td align="right">195</td>
-<td align="right">138</td>
-<td align="right">1.2873544</td>
+<td align="right">181</td>
+<td align="right">125</td>
+<td align="right">1.3862944</td>
 </tr>
 <tr class="even">
-<td>made</td>
-<td align="left">made</td>
-<td align="right">173</td>
-<td align="right">137</td>
-<td align="right">1.2946272</td>
+<td align="left">bad</td>
+<td align="right">176</td>
+<td align="right">121</td>
+<td align="right">1.4188176</td>
 </tr>
 <tr class="odd">
-<td>watch</td>
-<td align="left">watch</td>
-<td align="right">158</td>
-<td align="right">127</td>
-<td align="right">1.3704210</td>
+<td align="left">made</td>
+<td align="right">170</td>
+<td align="right">140</td>
+<td align="right">1.2729657</td>
 </tr>
 <tr class="even">
-<td>films</td>
-<td align="left">films</td>
-<td align="right">153</td>
-<td align="right">93</td>
-<td align="right">1.6820086</td>
+<td align="left">character</td>
+<td align="right">169</td>
+<td align="right">108</td>
+<td align="right">1.5324769</td>
 </tr>
 </tbody>
 </table>
@@ -735,7 +719,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Ten most frequent bi-grams, ‘&lt;br&gt;’ removed</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -744,74 +727,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>special_effects</td>
 <td align="left">special_effects</td>
-<td align="right">21</td>
-<td align="right">19</td>
-<td align="right">3.270169</td>
+<td align="right">28</td>
+<td align="right">24</td>
+<td align="right">3.036554</td>
 </tr>
 <tr class="even">
-<td>good_movie</td>
 <td align="left">good_movie</td>
-<td align="right">16</td>
-<td align="right">15</td>
-<td align="right">3.506558</td>
+<td align="right">18</td>
+<td align="right">17</td>
+<td align="right">3.381395</td>
 </tr>
 <tr class="odd">
-<td>long_time</td>
-<td align="left">long_time</td>
-<td align="right">15</td>
-<td align="right">15</td>
-<td align="right">3.506558</td>
-</tr>
-<tr class="even">
-<td>high_school</td>
-<td align="left">high_school</td>
-<td align="right">15</td>
-<td align="right">10</td>
-<td align="right">3.912023</td>
-</tr>
-<tr class="odd">
-<td>scooby_doo</td>
-<td align="left">scooby_doo</td>
-<td align="right">15</td>
-<td align="right">1</td>
-<td align="right">6.214608</td>
-</tr>
-<tr class="even">
-<td>low_budget</td>
 <td align="left">low_budget</td>
+<td align="right">18</td>
+<td align="right">16</td>
+<td align="right">3.442019</td>
+</tr>
+<tr class="even">
+<td align="left">waste_time</td>
+<td align="right">17</td>
 <td align="right">15</td>
-<td align="right">13</td>
-<td align="right">3.649659</td>
+<td align="right">3.506558</td>
 </tr>
 <tr class="odd">
-<td>watch_movie</td>
+<td align="left">movie_good</td>
+<td align="right">15</td>
+<td align="right">14</td>
+<td align="right">3.575551</td>
+</tr>
+<tr class="even">
+<td align="left">real_life</td>
+<td align="right">14</td>
+<td align="right">11</td>
+<td align="right">3.816713</td>
+</tr>
+<tr class="odd">
 <td align="left">watch_movie</td>
 <td align="right">14</td>
 <td align="right">13</td>
 <td align="right">3.649659</td>
 </tr>
 <tr class="even">
-<td>make_film</td>
-<td align="left">make_film</td>
+<td align="left">watching_movie</td>
 <td align="right">14</td>
 <td align="right">13</td>
 <td align="right">3.649659</td>
 </tr>
 <tr class="odd">
-<td>years_ago</td>
-<td align="left">years_ago</td>
-<td align="right">14</td>
+<td align="left">high_school</td>
 <td align="right">13</td>
-<td align="right">3.649659</td>
+<td align="right">7</td>
+<td align="right">4.268698</td>
 </tr>
 <tr class="even">
-<td>movie_good</td>
-<td align="left">movie_good</td>
+<td align="left">horror_films</td>
 <td align="right">13</td>
-<td align="right">13</td>
-<td align="right">3.649659</td>
+<td align="right">8</td>
+<td align="right">4.135167</td>
 </tr>
 </tbody>
 </table>
@@ -821,7 +794,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb12-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="kw">summary</span>(doc_lengths)</a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;    23.0    96.0   140.5   186.1   245.0   768.0</span></a></code></pre></div>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;      20      97     139     188     222     928</span></a></code></pre></div>
 <p>Often,it’s useful to prune your vocabulary and remove any tokens that appear in a small number of documents. This will greatly reduce the vocabulary size (see <a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf’s law</a>) and improve computation time.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># remove any tokens that were in 3 or fewer documents</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2">dtm &lt;-<span class="st"> </span>dtm[ , <span class="kw">colSums</span>(dtm <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span> ] <span class="co"># alternatively: dtm[ , tf_mat$term_freq &gt; 3 ]</span></a>
@@ -840,7 +813,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Ten most-frequent positive tokens</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -849,74 +821,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>movie</td>
-<td align="left">movie</td>
-<td align="right">358</td>
-<td align="right">128</td>
-<td align="right">0.5990082</td>
-</tr>
-<tr class="even">
-<td>film</td>
 <td align="left">film</td>
-<td align="right">349</td>
-<td align="right">125</td>
-<td align="right">0.6227247</td>
-</tr>
-<tr class="odd">
-<td>story</td>
-<td align="left">story</td>
-<td align="right">143</td>
-<td align="right">82</td>
-<td align="right">1.0443192</td>
+<td align="right">483</td>
+<td align="right">151</td>
+<td align="right">0.4591837</td>
 </tr>
 <tr class="even">
-<td>good</td>
+<td align="left">movie</td>
+<td align="right">340</td>
+<td align="right">130</td>
+<td align="right">0.6089291</td>
+</tr>
+<tr class="odd">
 <td align="left">good</td>
-<td align="right">138</td>
-<td align="right">83</td>
-<td align="right">1.0321978</td>
-</tr>
-<tr class="odd">
-<td>time</td>
-<td align="left">time</td>
-<td align="right">125</td>
-<td align="right">82</td>
-<td align="right">1.0443192</td>
+<td align="right">180</td>
+<td align="right">106</td>
+<td align="right">0.8130245</td>
 </tr>
 <tr class="even">
-<td>great</td>
 <td align="left">great</td>
-<td align="right">119</td>
-<td align="right">79</td>
-<td align="right">1.0815906</td>
+<td align="right">142</td>
+<td align="right">93</td>
+<td align="right">0.9438641</td>
 </tr>
 <tr class="odd">
-<td>watch</td>
-<td align="left">watch</td>
-<td align="right">82</td>
-<td align="right">59</td>
-<td align="right">1.3735010</td>
+<td align="left">time</td>
+<td align="right">138</td>
+<td align="right">88</td>
+<td align="right">0.9991267</td>
 </tr>
 <tr class="even">
-<td>love</td>
+<td align="left">story</td>
+<td align="right">124</td>
+<td align="right">75</td>
+<td align="right">1.1589754</td>
+</tr>
+<tr class="odd">
+<td align="left">people</td>
+<td align="right">107</td>
+<td align="right">65</td>
+<td align="right">1.3020763</td>
+</tr>
+<tr class="even">
+<td align="left">films</td>
+<td align="right">102</td>
+<td align="right">56</td>
+<td align="right">1.4511119</td>
+</tr>
+<tr class="odd">
 <td align="left">love</td>
-<td align="right">71</td>
-<td align="right">49</td>
-<td align="right">1.5592182</td>
-</tr>
-<tr class="odd">
-<td>life</td>
-<td align="left">life</td>
-<td align="right">69</td>
-<td align="right">49</td>
-<td align="right">1.5592182</td>
+<td align="right">82</td>
+<td align="right">53</td>
+<td align="right">1.5061716</td>
 </tr>
 <tr class="even">
-<td>character</td>
-<td align="left">character</td>
-<td align="right">69</td>
-<td align="right">53</td>
-<td align="right">1.4807465</td>
+<td align="left">made</td>
+<td align="right">81</td>
+<td align="right">67</td>
+<td align="right">1.2717709</td>
 </tr>
 </tbody>
 </table>
@@ -925,7 +887,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Ten most-frequent negative tokens</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -934,74 +895,64 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>movie</td>
 <td align="left">movie</td>
-<td align="right">520</td>
-<td align="right">182</td>
-<td align="right">0.3832420</td>
+<td align="right">434</td>
+<td align="right">160</td>
+<td align="right">0.4893466</td>
 </tr>
 <tr class="even">
-<td>film</td>
 <td align="left">film</td>
-<td align="right">486</td>
-<td align="right">159</td>
-<td align="right">0.5183445</td>
+<td align="right">426</td>
+<td align="right">143</td>
+<td align="right">0.6016758</td>
 </tr>
 <tr class="odd">
-<td>good</td>
 <td align="left">good</td>
-<td align="right">195</td>
-<td align="right">120</td>
-<td align="right">0.7997569</td>
+<td align="right">157</td>
+<td align="right">103</td>
+<td align="right">0.9297914</td>
 </tr>
 <tr class="even">
-<td>bad</td>
-<td align="left">bad</td>
-<td align="right">164</td>
-<td align="right">90</td>
-<td align="right">1.0874390</td>
-</tr>
-<tr class="odd">
-<td>time</td>
-<td align="left">time</td>
-<td align="right">146</td>
-<td align="right">98</td>
-<td align="right">1.0022812</td>
-</tr>
-<tr class="even">
-<td>story</td>
-<td align="left">story</td>
-<td align="right">134</td>
-<td align="right">85</td>
-<td align="right">1.1445974</td>
-</tr>
-<tr class="odd">
-<td>made</td>
-<td align="left">made</td>
-<td align="right">111</td>
-<td align="right">83</td>
-<td align="right">1.1684081</td>
-</tr>
-<tr class="even">
-<td>people</td>
 <td align="left">people</td>
-<td align="right">104</td>
-<td align="right">68</td>
-<td align="right">1.3677410</td>
+<td align="right">131</td>
+<td align="right">78</td>
+<td align="right">1.2078116</td>
 </tr>
 <tr class="odd">
-<td>acting</td>
-<td align="left">acting</td>
-<td align="right">102</td>
-<td align="right">79</td>
-<td align="right">1.2178008</td>
+<td align="left">bad</td>
+<td align="right">130</td>
+<td align="right">82</td>
+<td align="right">1.1578012</td>
 </tr>
 <tr class="even">
-<td>make</td>
-<td align="left">make</td>
+<td align="left">time</td>
+<td align="right">114</td>
+<td align="right">79</td>
+<td align="right">1.1950726</td>
+</tr>
+<tr class="odd">
+<td align="left">story</td>
+<td align="right">106</td>
+<td align="right">68</td>
+<td align="right">1.3450127</td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="right">95</td>
+<td align="right">60</td>
+<td align="right">1.4701758</td>
+</tr>
+<tr class="odd">
+<td align="left">made</td>
 <td align="right">89</td>
-<td align="right">70</td>
-<td align="right">1.3387534</td>
+<td align="right">73</td>
+<td align="right">1.2740610</td>
+</tr>
+<tr class="even">
+<td align="left">make</td>
+<td align="right">86</td>
+<td align="right">63</td>
+<td align="right">1.4213857</td>
 </tr>
 </tbody>
 </table>
@@ -1032,7 +983,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Reweighted: ten most relevant terms for positive sentiment</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -1043,94 +993,84 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>great</td>
 <td align="left">great</td>
-<td align="right">119</td>
-<td align="right">79</td>
-<td align="right">1.081591</td>
-<td align="right">0.0081168</td>
-<td align="right">0.0022971</td>
+<td align="right">142</td>
+<td align="right">93</td>
+<td align="right">0.9438641</td>
+<td align="right">0.0084009</td>
+<td align="right">0.0029998</td>
 </tr>
 <tr class="even">
-<td>heart</td>
-<td align="left">heart</td>
-<td align="right">42</td>
-<td align="right">17</td>
-<td align="right">2.617825</td>
-<td align="right">0.0028647</td>
-<td align="right">0.0015217</td>
+<td align="left">film</td>
+<td align="right">483</td>
+<td align="right">151</td>
+<td align="right">0.4591837</td>
+<td align="right">0.0285748</td>
+<td align="right">0.0014502</td>
 </tr>
 <tr class="odd">
-<td>story</td>
-<td align="left">story</td>
-<td align="right">143</td>
+<td align="left">love</td>
 <td align="right">82</td>
-<td align="right">1.044319</td>
-<td align="right">0.0097538</td>
-<td align="right">0.0014868</td>
+<td align="right">53</td>
+<td align="right">1.5061716</td>
+<td align="right">0.0048512</td>
+<td align="right">0.0012406</td>
 </tr>
 <tr class="even">
-<td>life</td>
-<td align="left">life</td>
-<td align="right">69</td>
-<td align="right">49</td>
-<td align="right">1.559218</td>
-<td align="right">0.0047064</td>
-<td align="right">0.0012444</td>
+<td align="left">films</td>
+<td align="right">102</td>
+<td align="right">56</td>
+<td align="right">1.4511119</td>
+<td align="right">0.0060344</td>
+<td align="right">0.0010810</td>
 </tr>
 <tr class="odd">
-<td>excellent</td>
-<td align="left">excellent</td>
-<td align="right">38</td>
-<td align="right">33</td>
-<td align="right">1.954531</td>
-<td align="right">0.0025919</td>
-<td align="right">0.0012191</td>
+<td align="left">performance</td>
+<td align="right">55</td>
+<td align="right">32</td>
+<td align="right">2.0107276</td>
+<td align="right">0.0032539</td>
+<td align="right">0.0008667</td>
 </tr>
 <tr class="even">
-<td>beautiful</td>
-<td align="left">beautiful</td>
-<td align="right">39</td>
+<td align="left">role</td>
+<td align="right">52</td>
+<td align="right">38</td>
+<td align="right">1.8388774</td>
+<td align="right">0.0030764</td>
+<td align="right">0.0008384</td>
+</tr>
+<tr class="odd">
+<td align="left">charlie</td>
 <td align="right">28</td>
-<td align="right">2.118834</td>
-<td align="right">0.0026601</td>
-<td align="right">0.0011977</td>
-</tr>
-<tr class="odd">
-<td>find</td>
-<td align="left">find</td>
-<td align="right">51</td>
-<td align="right">41</td>
-<td align="right">1.737466</td>
-<td align="right">0.0034786</td>
-<td align="right">0.0009418</td>
+<td align="right">3</td>
+<td align="right">4.3778513</td>
+<td align="right">0.0016565</td>
+<td align="right">0.0007911</td>
 </tr>
 <tr class="even">
-<td>world</td>
-<td align="left">world</td>
-<td align="right">49</td>
-<td align="right">38</td>
-<td align="right">1.813452</td>
-<td align="right">0.0033422</td>
-<td align="right">0.0008950</td>
+<td align="left">excellent</td>
+<td align="right">36</td>
+<td align="right">31</td>
+<td align="right">2.0424763</td>
+<td align="right">0.0021298</td>
+<td align="right">0.0006975</td>
 </tr>
 <tr class="odd">
-<td>watch</td>
-<td align="left">watch</td>
-<td align="right">82</td>
-<td align="right">59</td>
-<td align="right">1.373501</td>
-<td align="right">0.0055931</td>
-<td align="right">0.0008776</td>
+<td align="left">performances</td>
+<td align="right">34</td>
+<td align="right">21</td>
+<td align="right">2.4319411</td>
+<td align="right">0.0020115</td>
+<td align="right">0.0006687</td>
 </tr>
 <tr class="even">
-<td>years</td>
-<td align="left">years</td>
-<td align="right">60</td>
-<td align="right">43</td>
-<td align="right">1.689838</td>
-<td align="right">0.0040925</td>
-<td align="right">0.0008693</td>
+<td align="left">time</td>
+<td align="right">138</td>
+<td align="right">88</td>
+<td align="right">0.9991267</td>
+<td align="right">0.0081642</td>
+<td align="right">0.0006445</td>
 </tr>
 </tbody>
 </table>
@@ -1139,7 +1079,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Reweighted: ten most relevant terms for negative sentiment</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -1150,94 +1089,84 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>bad</td>
-<td align="left">bad</td>
-<td align="right">164</td>
-<td align="right">90</td>
-<td align="right">1.0874390</td>
-<td align="right">0.0087021</td>
-<td align="right">0.0027631</td>
-</tr>
-<tr class="even">
-<td>movie</td>
 <td align="left">movie</td>
-<td align="right">520</td>
-<td align="right">182</td>
-<td align="right">0.3832420</td>
-<td align="right">0.0275921</td>
-<td align="right">0.0013886</td>
-</tr>
-<tr class="odd">
-<td>people</td>
-<td align="left">people</td>
-<td align="right">104</td>
-<td align="right">68</td>
-<td align="right">1.3677410</td>
-<td align="right">0.0055184</td>
-<td align="right">0.0011313</td>
+<td align="right">434</td>
+<td align="right">160</td>
+<td align="right">0.4893466</td>
+<td align="right">0.0261304</td>
+<td align="right">0.0030342</td>
 </tr>
 <tr class="even">
-<td>worst</td>
+<td align="left">bad</td>
+<td align="right">130</td>
+<td align="right">82</td>
+<td align="right">1.1578012</td>
+<td align="right">0.0078271</td>
+<td align="right">0.0025752</td>
+</tr>
+<tr class="odd">
 <td align="left">worst</td>
-<td align="right">55</td>
-<td align="right">48</td>
-<td align="right">1.7160476</td>
-<td align="right">0.0029184</td>
-<td align="right">0.0011277</td>
-</tr>
-<tr class="odd">
-<td>script</td>
-<td align="left">script</td>
-<td align="right">62</td>
-<td align="right">50</td>
-<td align="right">1.6752257</td>
-<td align="right">0.0032898</td>
-<td align="right">0.0009023</td>
+<td align="right">47</td>
+<td align="right">39</td>
+<td align="right">1.9009588</td>
+<td align="right">0.0028298</td>
+<td align="right">0.0012483</td>
 </tr>
 <tr class="even">
-<td>acting</td>
-<td align="left">acting</td>
-<td align="right">102</td>
-<td align="right">79</td>
-<td align="right">1.2178008</td>
-<td align="right">0.0054123</td>
-<td align="right">0.0008759</td>
+<td align="left">pretty</td>
+<td align="right">54</td>
+<td align="right">41</td>
+<td align="right">1.8509483</td>
+<td align="right">0.0032512</td>
+<td align="right">0.0010729</td>
 </tr>
 <tr class="odd">
-<td>film</td>
-<td align="left">film</td>
-<td align="right">486</td>
-<td align="right">159</td>
-<td align="right">0.5183445</td>
-<td align="right">0.0257880</td>
-<td align="right">0.0008678</td>
+<td align="left">poor</td>
+<td align="right">42</td>
+<td align="right">34</td>
+<td align="right">2.0381599</td>
+<td align="right">0.0025287</td>
+<td align="right">0.0009771</td>
 </tr>
 <tr class="even">
-<td>guy</td>
 <td align="left">guy</td>
-<td align="right">55</td>
-<td align="right">33</td>
-<td align="right">2.0907411</td>
-<td align="right">0.0029184</td>
-<td align="right">0.0008591</td>
+<td align="right">56</td>
+<td align="right">28</td>
+<td align="right">2.2323159</td>
+<td align="right">0.0033717</td>
+<td align="right">0.0009248</td>
 </tr>
 <tr class="odd">
-<td>thing</td>
-<td align="left">thing</td>
-<td align="right">66</td>
-<td align="right">56</td>
-<td align="right">1.5618970</td>
-<td align="right">0.0035021</td>
-<td align="right">0.0007564</td>
+<td align="left">part</td>
+<td align="right">57</td>
+<td align="right">43</td>
+<td align="right">1.8033203</td>
+<td align="right">0.0034319</td>
+<td align="right">0.0008955</td>
 </tr>
 <tr class="even">
-<td>awful</td>
-<td align="left">awful</td>
-<td align="right">35</td>
+<td align="left">black</td>
+<td align="right">41</td>
+<td align="right">20</td>
+<td align="right">2.5687881</td>
+<td align="right">0.0024685</td>
+<td align="right">0.0008870</td>
+</tr>
+<tr class="odd">
+<td align="left">minutes</td>
+<td align="right">44</td>
+<td align="right">32</td>
+<td align="right">2.0987845</td>
+<td align="right">0.0026492</td>
+<td align="right">0.0008588</td>
+</tr>
+<tr class="even">
+<td align="left">stupid</td>
+<td align="right">31</td>
 <td align="right">24</td>
-<td align="right">2.4091948</td>
-<td align="right">0.0018572</td>
-<td align="right">0.0007529</td>
+<td align="right">2.3864666</td>
+<td align="right">0.0018665</td>
+<td align="right">0.0008519</td>
 </tr>
 </tbody>
 </table>
@@ -1251,7 +1180,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Reweighted: ten most relevant bigrams for positive sentiment</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -1262,94 +1190,84 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>highly_recommend</td>
-<td align="left">highly_recommend</td>
-<td align="right">11</td>
-<td align="right">11</td>
-<td align="right">3.053143</td>
-<td align="right">0.0007503</td>
-<td align="right">0.0003922</td>
-</tr>
-<tr class="even">
-<td>big_screen</td>
-<td align="left">big_screen</td>
-<td align="right">8</td>
-<td align="right">5</td>
-<td align="right">3.841601</td>
-<td align="right">0.0005457</td>
-<td align="right">0.0002771</td>
-</tr>
-<tr class="odd">
-<td>real_life</td>
-<td align="left">real_life</td>
-<td align="right">9</td>
-<td align="right">8</td>
-<td align="right">3.371597</td>
-<td align="right">0.0006139</td>
-<td align="right">0.0002557</td>
-</tr>
-<tr class="even">
-<td>world_war</td>
-<td align="left">world_war</td>
-<td align="right">8</td>
-<td align="right">5</td>
-<td align="right">3.841601</td>
-<td align="right">0.0005457</td>
-<td align="right">0.0002174</td>
-</tr>
-<tr class="odd">
-<td>watched_movie</td>
-<td align="left">watched_movie</td>
-<td align="right">7</td>
-<td align="right">7</td>
-<td align="right">3.505128</td>
-<td align="right">0.0004775</td>
-<td align="right">0.0002089</td>
-</tr>
-<tr class="even">
-<td>enjoy_watching</td>
-<td align="left">enjoy_watching</td>
-<td align="right">6</td>
-<td align="right">6</td>
-<td align="right">3.659279</td>
-<td align="right">0.0004092</td>
-<td align="right">0.0002003</td>
-</tr>
-<tr class="odd">
-<td>years_ago</td>
-<td align="left">years_ago</td>
-<td align="right">9</td>
-<td align="right">8</td>
-<td align="right">3.371597</td>
-<td align="right">0.0006139</td>
-<td align="right">0.0001961</td>
-</tr>
-<tr class="even">
-<td>makes_movie</td>
 <td align="left">makes_movie</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.841601</td>
-<td align="right">0.0003410</td>
-<td align="right">0.0001918</td>
-</tr>
-<tr class="odd">
-<td>loved_movie</td>
-<td align="left">loved_movie</td>
-<td align="right">5</td>
-<td align="right">5</td>
-<td align="right">3.841601</td>
-<td align="right">0.0003410</td>
-<td align="right">0.0001918</td>
+<td align="right">10</td>
+<td align="right">8</td>
+<td align="right">3.397022</td>
+<td align="right">0.0005916</td>
+<td align="right">0.0002932</td>
 </tr>
 <tr class="even">
-<td>movie_worth</td>
-<td align="left">movie_worth</td>
+<td align="left">good_movie</td>
+<td align="right">14</td>
+<td align="right">14</td>
+<td align="right">2.837406</td>
+<td align="right">0.0008283</td>
+<td align="right">0.0002911</td>
+</tr>
+<tr class="odd">
+<td align="left">high_school</td>
+<td align="right">11</td>
+<td align="right">5</td>
+<td align="right">3.867026</td>
+<td align="right">0.0006508</td>
+<td align="right">0.0002629</td>
+</tr>
+<tr class="even">
+<td align="left">star_wars</td>
+<td align="right">9</td>
+<td align="right">5</td>
+<td align="right">3.867026</td>
+<td align="right">0.0005324</td>
+<td align="right">0.0002340</td>
+</tr>
+<tr class="odd">
+<td align="left">great_movie</td>
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="right">3.397022</td>
+<td align="right">0.0004733</td>
+<td align="right">0.0002047</td>
+</tr>
+<tr class="even">
+<td align="left">highly_recommended</td>
 <td align="right">6</td>
 <td align="right">6</td>
-<td align="right">3.659279</td>
-<td align="right">0.0004092</td>
-<td align="right">0.0001705</td>
+<td align="right">3.684704</td>
+<td align="right">0.0003550</td>
+<td align="right">0.0001759</td>
+</tr>
+<tr class="odd">
+<td align="left">great_film</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">3.530553</td>
+<td align="right">0.0004733</td>
+<td align="right">0.0001749</td>
+</tr>
+<tr class="even">
+<td align="left">movie_great</td>
+<td align="right">8</td>
+<td align="right">7</td>
+<td align="right">3.530553</td>
+<td align="right">0.0004733</td>
+<td align="right">0.0001749</td>
+</tr>
+<tr class="odd">
+<td align="left">academy_award</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">4.090169</td>
+<td align="right">0.0002958</td>
+<td align="right">0.0001466</td>
+</tr>
+<tr class="even">
+<td align="left">acting_great</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">3.867026</td>
+<td align="right">0.0002958</td>
+<td align="right">0.0001466</td>
 </tr>
 </tbody>
 </table>
@@ -1358,7 +1276,6 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <caption>Reweighted: ten most relevant bigrams for negative sentiment</caption>
 <thead>
 <tr class="header">
-<th></th>
 <th align="left">term</th>
 <th align="right">term_freq</th>
 <th align="right">doc_freq</th>
@@ -1369,99 +1286,92 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </thead>
 <tbody>
 <tr class="odd">
-<td>good_thing</td>
-<td align="left">good_thing</td>
-<td align="right">11</td>
-<td align="right">11</td>
-<td align="right">3.189353</td>
-<td align="right">0.0005837</td>
-<td align="right">0.0002554</td>
-</tr>
-<tr class="even">
-<td>waste_time</td>
 <td align="left">waste_time</td>
-<td align="right">12</td>
-<td align="right">11</td>
-<td align="right">3.189353</td>
-<td align="right">0.0006367</td>
-<td align="right">0.0002488</td>
-</tr>
-<tr class="odd">
-<td>acting_bad</td>
-<td align="left">acting_bad</td>
-<td align="right">10</td>
-<td align="right">9</td>
-<td align="right">3.390024</td>
-<td align="right">0.0005306</td>
-<td align="right">0.0002322</td>
+<td align="right">16</td>
+<td align="right">14</td>
+<td align="right">2.925463</td>
+<td align="right">0.0009633</td>
+<td align="right">0.0004561</td>
 </tr>
 <tr class="even">
-<td>bad_acting</td>
-<td align="left">bad_acting</td>
-<td align="right">9</td>
-<td align="right">9</td>
-<td align="right">3.390024</td>
-<td align="right">0.0004776</td>
-<td align="right">0.0002090</td>
+<td align="left">special_effects</td>
+<td align="right">20</td>
+<td align="right">16</td>
+<td align="right">2.791932</td>
+<td align="right">0.0012042</td>
+<td align="right">0.0003686</td>
 </tr>
 <tr class="odd">
-<td>worst_movie</td>
+<td align="left">movie_made</td>
+<td align="right">10</td>
+<td align="right">10</td>
+<td align="right">3.261935</td>
+<td align="right">0.0006021</td>
+<td align="right">0.0002440</td>
+</tr>
+<tr class="even">
+<td align="left">make_sense</td>
+<td align="right">9</td>
+<td align="right">6</td>
+<td align="right">3.772761</td>
+<td align="right">0.0005419</td>
+<td align="right">0.0002136</td>
+</tr>
+<tr class="odd">
+<td align="left">scooby_doo</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right">4.178226</td>
+<td align="right">0.0004817</td>
+<td align="right">0.0002131</td>
+</tr>
+<tr class="even">
 <td align="left">worst_movie</td>
-<td align="right">10</td>
-<td align="right">10</td>
-<td align="right">3.284664</td>
-<td align="right">0.0005306</td>
-<td align="right">0.0002023</td>
+<td align="right">7</td>
+<td align="right">6</td>
+<td align="right">3.772761</td>
+<td align="right">0.0004215</td>
+<td align="right">0.0002126</td>
+</tr>
+<tr class="odd">
+<td align="left">part_movie</td>
+<td align="right">8</td>
+<td align="right">6</td>
+<td align="right">3.772761</td>
+<td align="right">0.0004817</td>
+<td align="right">0.0001833</td>
 </tr>
 <tr class="even">
-<td>read_book</td>
 <td align="left">read_book</td>
 <td align="right">8</td>
-<td align="right">6</td>
-<td align="right">3.795489</td>
-<td align="right">0.0004245</td>
-<td align="right">0.0001857</td>
+<td align="right">8</td>
+<td align="right">3.485079</td>
+<td align="right">0.0004817</td>
+<td align="right">0.0001833</td>
 </tr>
 <tr class="odd">
-<td>comic_book</td>
-<td align="left">comic_book</td>
-<td align="right">8</td>
+<td align="left">good_idea</td>
 <td align="right">6</td>
-<td align="right">3.795489</td>
-<td align="right">0.0004245</td>
-<td align="right">0.0001857</td>
+<td align="right">6</td>
+<td align="right">3.772761</td>
+<td align="right">0.0003612</td>
+<td align="right">0.0001822</td>
 </tr>
 <tr class="even">
-<td>great_idea</td>
-<td align="left">great_idea</td>
-<td align="right">7</td>
-<td align="right">7</td>
-<td align="right">3.641338</td>
-<td align="right">0.0003714</td>
-<td align="right">0.0001625</td>
-</tr>
-<tr class="odd">
-<td>bad_guys</td>
-<td align="left">bad_guys</td>
+<td align="left">main_character</td>
 <td align="right">8</td>
 <td align="right">6</td>
-<td align="right">3.795489</td>
-<td align="right">0.0004245</td>
-<td align="right">0.0001559</td>
-</tr>
-<tr class="even">
-<td>make_sense</td>
-<td align="left">make_sense</td>
-<td align="right">8</td>
-<td align="right">6</td>
-<td align="right">3.795489</td>
-<td align="right">0.0004245</td>
-<td align="right">0.0001559</td>
+<td align="right">3.772761</td>
+<td align="right">0.0004817</td>
+<td align="right">0.0001534</td>
 </tr>
 </tbody>
 </table>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

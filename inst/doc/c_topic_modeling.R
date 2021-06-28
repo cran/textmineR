@@ -1,10 +1,10 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(textmineR)
 
 # load nih_sample data set from textmineR
@@ -27,7 +27,7 @@ dtm <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT, # character vector of docum
 dtm <- dtm[,colSums(dtm) > 2]
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # Fit a Latent Dirichlet Allocation model
 # note the number of topics is arbitrary here
@@ -48,12 +48,12 @@ model <- FitLdaModel(dtm = dtm,
                      cpus = 2) 
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 str(model)
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # R-squared 
 # - only works for probabilistic models like LDA and CTM
@@ -62,7 +62,7 @@ model$r2
 # log Likelihood (does not consider the prior) 
 plot(model$log_likelihood, type = "l")
 
-## ----fig.width = 7.5, fig.height = 4-------------------------------------
+## ----fig.width = 7.5, fig.height = 4------------------------------------------
 # probabilistic coherence, a measure of topic quality
 # this measure can be used with any topic model, not just probabilistic ones
 summary(model$coherence)
@@ -71,18 +71,18 @@ hist(model$coherence,
      col= "blue", 
      main = "Histogram of probabilistic coherence")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Get the top terms of each topic
 model$top_terms <- GetTopTerms(phi = model$phi, M = 5)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  head(t(model$top_terms)
 
-## ---- echo = FALSE-------------------------------------------------------
+## ---- echo = FALSE------------------------------------------------------------
 knitr::kable(head(t(model$top_terms)), 
              col.names = rep("", nrow(model$top_terms)))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Get the prevalence of each topic
 # You can make this discrete by applying a threshold, say 0.05, for
 # topics in/out of docuemnts. 
@@ -109,14 +109,14 @@ model$summary <- data.frame(topic = rownames(model$phi),
                             stringsAsFactors = FALSE)
 
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  model$summary[ order(model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(model$summary[ order(model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most prevalent topics")
 
 
-## ----fig.width = 7.5, fig.height = 4-------------------------------------
+## ----fig.width = 7.5, fig.height = 4------------------------------------------
 
 # predictions with gibbs
 assignments <- predict(model, dtm,
@@ -136,7 +136,7 @@ barplot(rbind(assignments[10,], assignments_dot[10,]),
 legend("topright", legend = c("gibbs", "dot"), col = c("red", "blue"), 
        fill = c("red", "blue"))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # get a tf-idf matrix
 tf_sample <- TermDocFreq(dtm)
@@ -162,7 +162,7 @@ lsa_model <- FitLsaModel(dtm = tf_idf,
 # data = data used to train model
 str(lsa_model)
 
-## ----fig.width = 7.5, fig.height = 4-------------------------------------
+## ----fig.width = 7.5, fig.height = 4------------------------------------------
 # probabilistic coherence, a measure of topic quality
 # - can be used with any topic lsa_model, e.g. LSA
 
@@ -173,14 +173,14 @@ hist(lsa_model$coherence, col= "blue")
 # Get the top terms of each topic
 lsa_model$top_terms <- GetTopTerms(phi = lsa_model$phi, M = 5)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  head(t(lsa_model$top_terms))
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(t(lsa_model$top_terms)), 
              col.names = rep("", nrow(lsa_model$top_terms)))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # Get the prevalence of each topic
 # You can make this discrete by applying a threshold, say 0.05, for
@@ -192,14 +192,14 @@ lsa_model$labels <- LabelTopics(assignments = lsa_model$theta > 0.05,
                             dtm = dtm,
                             M = 1)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  head(lsa_model$labels)
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(lsa_model$labels))
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # put them together, with coherence into a summary table
 lsa_model$summary <- data.frame(topic = rownames(lsa_model$phi),
@@ -211,14 +211,14 @@ lsa_model$summary <- data.frame(topic = rownames(lsa_model$phi),
                             }),
                             stringsAsFactors = FALSE)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most prevalent LSA topics")
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Get topic predictions for all 5,000 documents
 
 # set up the assignments matrix and a simple dot product gives us predictions
@@ -230,7 +230,7 @@ lsa_assignments <- predict(lsa_model, lsa_assignments)
 
 
 
-## ----fig.width = 7.5, fig.height = 4-------------------------------------
+## ----fig.width = 7.5, fig.height = 4------------------------------------------
 # compare the "fit" assignments to the predicted ones
 barplot(rbind(lsa_model$theta[ rownames(dtm)[ 1 ] , ],
               lsa_assignments[ rownames(dtm)[ 1 ] , ]), 
@@ -244,7 +244,7 @@ legend("topleft",
        fill = c("red", "blue"))
 
 
-## ----fig.width = 7.5, fig.height = 4-------------------------------------
+## ----fig.width = 7.5, fig.height = 4------------------------------------------
 # load a sample DTM
 data(nih_sample_dtm)
 
@@ -261,7 +261,7 @@ k_list <- seq(10,85, by=15)
 model_dir <- paste0("models_", digest::digest(colnames(nih_sample_dtm), algo = "sha1"))
 
 # Fit a bunch of LDA models
-# even on this trivial corpus, it will a bit of time to fit all of these models
+# even on this trivial corpus, it will take a bit of time to fit all of these models
 model_list <- TmParallelApply(X = k_list, FUN = function(k){
 
   m <- FitLdaModel(dtm = nih_sample_dtm, 

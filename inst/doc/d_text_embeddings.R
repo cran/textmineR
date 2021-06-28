@@ -1,10 +1,10 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # load the NIH data set
 library(textmineR)
@@ -22,7 +22,7 @@ tcm <- CreateTcm(doc_vec = nih_sample$ABSTRACT_TEXT,
 # a TCM is generally larger than a DTM
 dim(tcm)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # use LDA to get embeddings into probability space
 # This will take considerably longer as the TCM matrix has many more rows 
 # than your average DTM
@@ -38,19 +38,19 @@ embeddings <- FitLdaModel(dtm = tcm,
                           calc_r2 = TRUE,
                           cpus = 2)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Get an R-squared for general goodness of fit
 embeddings$r2
 
 # Get coherence (relative to the TCM) for goodness of fit
 summary(embeddings$coherence)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Get top terms, no labels because we don't have bigrams
 embeddings$top_terms <- GetTopTerms(phi = embeddings$phi,
                                     M = 5)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Create a summary table, similar to the above
 embeddings$summary <- data.frame(topic = rownames(embeddings$phi),
                                  coherence = round(embeddings$coherence, 3),
@@ -61,19 +61,19 @@ embeddings$summary <- data.frame(topic = rownames(embeddings$phi),
                                  stringsAsFactors = FALSE)
 
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  embeddings$summary[ order(embeddings$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(embeddings$summary[ order(embeddings$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of top 10 embedding dimensions")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  embeddings$summary[ order(embeddings$summary$coherence, decreasing = TRUE) , ][ 1:10 , ]
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(embeddings$summary[ order(embeddings$summary$coherence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most coherent embedding dimensions")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Make a DTM from our documents
 dtm_embed <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT,
                        doc_names = nih_sample$APPLICATION_ID,
@@ -87,7 +87,7 @@ dtm_embed <- dtm_embed[,colSums(dtm_embed) > 2]
 embedding_assignments <- predict(embeddings, dtm_embed, method = "gibbs",
                                  iterations = 200, burnin = 180)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # get a goodness of fit relative to the DTM
 embeddings$r2_dtm <- CalcTopicModelR2(dtm = dtm_embed, 
                                       phi = embeddings$phi[,colnames(dtm_embed)], # line up vocabulary

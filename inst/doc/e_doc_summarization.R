@@ -1,10 +1,10 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----embedding-----------------------------------------------------------
+## ----embedding----------------------------------------------------------------
 library(textmineR)
 
 # load the data
@@ -43,7 +43,7 @@ embeddings <- FitLdaModel(dtm = tcm,
                           cpus = 2)
 
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #    # parse it into sentences
 #    sent <- stringi::stri_split_boundaries(doc, type = "sentence")[[ 1 ]]
 #  
@@ -64,15 +64,15 @@ embeddings <- FitLdaModel(dtm = tcm,
 #    e <- as.matrix(e)
 #  
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #    # get the pairwise distances between each embedded sentence
 #    e_dist <- CalcHellingerDist(e)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #    # turn into a similarity matrix
 #    g <- (1 - e_dist) * 100
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #    # we don't need sentences connected to themselves
 #    diag(g) <- 0
 #  
@@ -85,7 +85,7 @@ embeddings <- FitLdaModel(dtm = tcm,
 #    # by taking pointwise max, we'll make the matrix symmetric again
 #    g <- pmax(g, t(g))
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #    g <- graph.adjacency(g, mode = "undirected", weighted = TRUE)
 #  
 #    # calculate eigenvector centrality
@@ -98,7 +98,7 @@ embeddings <- FitLdaModel(dtm = tcm,
 #  
 #    paste(result, collapse = " ")
 
-## ----summaries-----------------------------------------------------------
+## ----summaries----------------------------------------------------------------
 
 library(igraph) 
 
@@ -161,7 +161,7 @@ summarizer <- function(doc, gamma) {
   paste(result, collapse = " ")
 }
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # Let's see the summary of the first couple of reviews
 docs <- movie_review$review[ 1:3 ]
 names(docs) <- movie_review$id[ 1:3 ]

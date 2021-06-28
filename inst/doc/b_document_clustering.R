@@ -1,10 +1,10 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", warning = FALSE
 )
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(textmineR)
 
 # load nih_sample data set from textmineR
@@ -26,7 +26,7 @@ dtm <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT, # character vector of docum
 tf_mat <- TermDocFreq(dtm)
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 # TF-IDF and cosine similarity
 tfidf <- t(dtm[ , tf_mat$term ]) * tf_mat$idf
@@ -34,19 +34,19 @@ tfidf <- t(dtm[ , tf_mat$term ]) * tf_mat$idf
 tfidf <- t(tfidf)
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 csim <- tfidf / sqrt(rowSums(tfidf * tfidf))
 
 csim <- csim %*% t(csim)
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 
 cdist <- as.dist(1 - csim)
 
 
-## ----fig.width = 7.5, fig.height = 4-------------------------------------
+## ----fig.width = 7.5, fig.height = 4------------------------------------------
 
 hc <- hclust(cdist, "ward.D")
 
@@ -58,7 +58,7 @@ plot(hc, main = "Hierarchical clustering of 100 NIH grant abstracts",
 rect.hclust(hc, 10, border = "red")
 
 
-## ----documnet_clustering_5-----------------------------------------------
+## ----documnet_clustering_5----------------------------------------------------
 p_words <- colSums(dtm) / sum(dtm)
 
 cluster_words <- lapply(unique(clustering), function(x){
@@ -71,7 +71,7 @@ cluster_words <- lapply(unique(clustering), function(x){
 })
 
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 # create a summary table of the top 5 words defining each cluster
 cluster_summary <- data.frame(cluster = unique(clustering),
                               size = as.numeric(table(clustering)),
@@ -83,13 +83,13 @@ cluster_summary <- data.frame(cluster = unique(clustering),
                               stringsAsFactors = FALSE)
 
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  cluster_summary
 
-## ----echo = FALSE--------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(cluster_summary, caption = "Cluster summary table")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  # plot a word cloud of one cluster as an example
 #  wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]),
 #                       freq = cluster_words[[ 5 ]],
@@ -98,7 +98,7 @@ knitr::kable(cluster_summary, caption = "Cluster summary table")
 #                       colors = c("red", "yellow", "blue"),
 #                       main = "Top words in cluster 100")
 
-## ----echo = FALSE, warning = FALSE, fit.height = 7.5, fig.width = 7.5----
+## ----echo = FALSE, warning = FALSE, fit.height = 7.5, fig.width = 7.5---------
 # plot a word cloud of one cluster as an example
 suppressWarnings({
   wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]), 
