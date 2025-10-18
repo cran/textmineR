@@ -4,12 +4,15 @@ knitr::opts_chunk$set(
   comment = "#>", warning = FALSE
 )
 
-## -----------------------------------------------------------------------------
+# handle package dependencies in Suggests gracefully
+need <- function(pkgs) all(vapply(pkgs, requireNamespace, TRUE, quietly = TRUE))
+
+
+## ----eval = need("tidytext")--------------------------------------------------
 ################################################################################
 # Example: Using tidytext with textmineR
 ################################################################################
 
-library(tidytext)
 library(textmineR)
 library(dplyr)
 library(tidyr)
@@ -20,7 +23,7 @@ docs <- textmineR::nih_sample
 # tokenize using tidytext's unnest_tokens
 tidy_docs <- docs %>% 
   select(APPLICATION_ID, ABSTRACT_TEXT) %>% 
-  unnest_tokens(output = word, 
+  tidytext::unnest_tokens(output = word, 
                 input = ABSTRACT_TEXT,
                 stopwords = c(stopwords::stopwords("en"), 
                               stopwords::stopwords(source = "smart")),
@@ -34,7 +37,7 @@ tidy_docs <- tidy_docs %>% # filter words that are just numbers
 
 # turn a tidy tbl into a sparse dgCMatrix for use in textmineR
 d <- tidy_docs %>% 
-  cast_sparse(APPLICATION_ID, word, n)
+  tidytext::cast_sparse(APPLICATION_ID, word, n)
 
 
 # create a topic model

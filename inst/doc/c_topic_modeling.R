@@ -4,6 +4,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+
 ## -----------------------------------------------------------------------------
 library(textmineR)
 
@@ -22,7 +23,7 @@ dtm <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT, # character vector of docum
                  remove_punctuation = TRUE, # punctuation - this is the default
                  remove_numbers = TRUE, # numbers - this is the default
                  verbose = FALSE, # Turn off status bar for this demo
-                 cpus = 2) # default is all available cpus on the system
+                 cpus = 1) # default is all available cpus on the system
 
 dtm <- dtm[,colSums(dtm) > 2]
 
@@ -45,7 +46,7 @@ model <- FitLdaModel(dtm = dtm,
                      calc_likelihood = TRUE,
                      calc_coherence = TRUE,
                      calc_r2 = TRUE,
-                     cpus = 2) 
+                     cpus = 1) 
 
 
 ## -----------------------------------------------------------------------------
@@ -76,9 +77,9 @@ hist(model$coherence,
 model$top_terms <- GetTopTerms(phi = model$phi, M = 5)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(t(model$top_terms)
+# head(t(model$top_terms)
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(t(model$top_terms)), 
              col.names = rep("", nrow(model$top_terms)))
 
@@ -110,7 +111,7 @@ model$summary <- data.frame(topic = rownames(model$phi),
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  model$summary[ order(model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
+# model$summary[ order(model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(model$summary[ order(model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most prevalent topics")
@@ -123,7 +124,7 @@ assignments <- predict(model, dtm,
                        method = "gibbs", 
                        iterations = 200,
                        burnin = 180,
-                       cpus = 2)
+                       cpus = 1)
 
 # predictions with dot
 assignments_dot <- predict(model, dtm,
@@ -174,7 +175,7 @@ hist(lsa_model$coherence, col= "blue")
 lsa_model$top_terms <- GetTopTerms(phi = lsa_model$phi, M = 5)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(t(lsa_model$top_terms))
+# head(t(lsa_model$top_terms))
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(t(lsa_model$top_terms)), 
@@ -193,7 +194,7 @@ lsa_model$labels <- LabelTopics(assignments = lsa_model$theta > 0.05,
                             M = 1)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(lsa_model$labels)
+# head(lsa_model$labels)
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(lsa_model$labels))
@@ -212,7 +213,7 @@ lsa_model$summary <- data.frame(topic = rownames(lsa_model$phi),
                             stringsAsFactors = FALSE)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
+# lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(lsa_model$summary[ order(lsa_model$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most prevalent LSA topics")
@@ -279,7 +280,7 @@ model_list <- TmParallelApply(X = k_list, FUN = function(k){
   
   m
 }, export= ls(), # c("nih_sample_dtm"), # export only needed for Windows machines
-cpus = 2) 
+cpus = 1) 
 
 # Get average coherence for each model
 coherence_mat <- data.frame(k = sapply(model_list, function(x) nrow(x$phi)), 

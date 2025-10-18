@@ -14,6 +14,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# handle package dependencies in Suggests gracefully
+need <- function(pkgs) all(vapply(pkgs, requireNamespace, TRUE, quietly = TRUE))
+
+
 ```
 
 In this example we'll use text embeddings and a bit of network analysis to build a basic document summarizer. 
@@ -49,7 +54,7 @@ movie_review$review <- stringr::str_replace_all(movie_review$review, "<br */>", 
 tcm <- CreateTcm(doc_vec = movie_review$review,
                  skipgram_window = 10,
                  verbose = FALSE,
-                 cpus = 2)
+                 cpus = 1)
 
 # use LDA to get embeddings into probability space
 # This will take considerably longer as the TCM matrix has many more rows 
@@ -64,7 +69,7 @@ embeddings <- FitLdaModel(dtm = tcm,
                           calc_likelihood = FALSE,
                           calc_coherence = FALSE,
                           calc_r2 = FALSE,
-                          cpus = 2)
+                          cpus = 1)
 
 ```
 
@@ -84,7 +89,7 @@ In the code chunk below, we split the document into sentences using the `stringi
   names(sent) <- seq_along(sent) # so we know index and order
   
   # embed the sentences in the model
-  e <- CreateDtm(sent, ngram_window = c(1,1), verbose = FALSE, cpus = 2)
+  e <- CreateDtm(sent, ngram_window = c(1,1), verbose = FALSE, cpus = 1)
   
   # remove any documents with 2 or fewer words
   e <- e[ rowSums(e) > 2 , ]
@@ -132,10 +137,10 @@ If you consider a similarity matrix to be an adjacency matrix, then you have a f
 Using the `igraph` package (with its own objects) to calculate eigenvector centrality. From there, we'll take the top three sentences.
 
 ```{r eval = FALSE}
-  g <- graph.adjacency(g, mode = "undirected", weighted = TRUE)
+  g <- igraph::graph.adjacency(g, mode = "undirected", weighted = TRUE)
   
   # calculate eigenvector centrality
-  ev <- evcent(g)
+  ev <- igraph::evcent(g)
   
   # format the result
   result <- sent[ names(ev$vector)[ order(ev$vector, decreasing = TRUE)[ 1:3 ] ] ]
@@ -149,9 +154,7 @@ Using the `igraph` package (with its own objects) to calculate eigenvector centr
 
 The code below puts it all together in a single function. The first few lines vectorize the code, so that we can summarize multiple documents from a single function call. 
 
-```{r summaries}
-
-library(igraph) 
+```{r eval = need("igraph"), summaries}
 
 # let's do this in a function
 
@@ -168,7 +171,7 @@ summarizer <- function(doc, gamma) {
   names(sent) <- seq_along(sent) # so we know index and order
   
   # embed the sentences in the model
-  e <- CreateDtm(sent, ngram_window = c(1,1), verbose = FALSE, cpus = 2)
+  e <- CreateDtm(sent, ngram_window = c(1,1), verbose = FALSE, cpus = 1)
   
   # remove any documents with 2 or fewer words
   e <- e[ rowSums(e) > 2 , ]
@@ -199,10 +202,10 @@ summarizer <- function(doc, gamma) {
   # by taking pointwise max, we'll make the matrix symmetric again
   g <- pmax(g, t(g))
   
-  g <- graph.adjacency(g, mode = "undirected", weighted = TRUE)
+  g <- igraph::graph.adjacency(g, mode = "undirected", weighted = TRUE)
   
   # calculate eigenvector centrality
-  ev <- evcent(g)
+  ev <- igraph::evcent(g)
   
   # format the result
   result <- sent[ names(ev$vector)[ order(ev$vector, decreasing = TRUE)[ 1:3 ] ] ]
@@ -215,7 +218,7 @@ summarizer <- function(doc, gamma) {
 
 How well did we do? Let's look at summaries from the first three reviews.
 
-```{r}
+```{r eval = need("igraph")}
 # Let's see the summary of the first couple of reviews
 docs <- movie_review$review[ 1:3 ]
 names(docs) <- movie_review$id[ 1:3 ]

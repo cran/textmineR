@@ -1,7 +1,7 @@
 Package: textmineR
 Type: Package
 Title: Functions for Text Mining and Topic Modeling
-Version: 3.0.5
+Version: 3.0.6
 Authors@R: c(
     person("Tommy", "Jones", role = c("aut", "cre"), email = "jones.thos.w@gmail.com"),
     person("William", "Doane", email = "wil@drdoane.com", role = "ctb"),
@@ -12,7 +12,8 @@ Description: An aid for text mining in R, with a syntax that
     topic models that take similarly-formatted input and give similarly-formatted
     output. Has additional functionality for analyzing and diagnostics for
     topic models.
-SystemRequirements: GNU make, C++11
+SystemRequirements: GNU make
+Encoding: UTF-8
 Depends: R (>= 3.0.2), Matrix
 Imports: gtools, magrittr, methods, parallel, text2vec (>= 0.5),
         stopwords, stringr, Rcpp, RcppProgress, RSpectra, utils
@@ -24,14 +25,14 @@ URL: https://www.rtextminer.com/
 BugReports: https://github.com/TommyJones/textmineR/issues
 LazyData: true
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Language: en-US
 NeedsCompilation: yes
-Packaged: 2021-06-27 23:50:12 UTC; tommy
+Packaged: 2025-10-17 21:29:51 UTC; twj22
 Author: Tommy Jones [aut, cre],
   William Doane [ctb],
   Mattias Attbom [ctb]
 Maintainer: Tommy Jones <jones.thos.w@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-06-28 05:00:02 UTC
+Date/Publication: 2025-10-18 06:10:02 UTC

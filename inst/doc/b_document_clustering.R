@@ -4,6 +4,11 @@ knitr::opts_chunk$set(
   comment = "#>", warning = FALSE
 )
 
+# handle package dependencies in Suggests gracefully
+need <- function(pkgs) all(vapply(pkgs, requireNamespace, TRUE, quietly = TRUE))
+
+
+
 ## -----------------------------------------------------------------------------
 library(textmineR)
 
@@ -20,7 +25,7 @@ dtm <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT, # character vector of docum
                  remove_punctuation = TRUE, # punctuation - this is the default
                  remove_numbers = TRUE, # numbers - this is the default
                  verbose = FALSE, # Turn off status bar for this demo
-                 cpus = 2) # default is all available cpus on the system
+                 cpus = 1) # default is all available cpus on the system
 
 # construct the matrix of term counts to get the IDF vector
 tf_mat <- TermDocFreq(dtm)
@@ -84,21 +89,21 @@ cluster_summary <- data.frame(cluster = unique(clustering),
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  cluster_summary
+# cluster_summary
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(cluster_summary, caption = "Cluster summary table")
 
-## ----eval = FALSE-------------------------------------------------------------
-#  # plot a word cloud of one cluster as an example
-#  wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]),
-#                       freq = cluster_words[[ 5 ]],
-#                       max.words = 50,
-#                       random.order = FALSE,
-#                       colors = c("red", "yellow", "blue"),
-#                       main = "Top words in cluster 100")
+## ----eval = need("wordcloud")-------------------------------------------------
+# plot a word cloud of one cluster as an example
+wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]), 
+                     freq = cluster_words[[ 5 ]], 
+                     max.words = 50, 
+                     random.order = FALSE, 
+                     colors = c("red", "yellow", "blue"),
+                     main = "Top words in cluster 100")
 
-## ----echo = FALSE, warning = FALSE, fit.height = 7.5, fig.width = 7.5---------
+## ----eval = need("wordcloud"), echo = FALSE, warning = FALSE, fit.height = 7.5, fig.width = 7.5----
 # plot a word cloud of one cluster as an example
 suppressWarnings({
   wordcloud::wordcloud(words = names(cluster_words[[ 5 ]]), 

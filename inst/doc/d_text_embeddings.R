@@ -4,6 +4,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+
+
 ## -----------------------------------------------------------------------------
 
 # load the NIH data set
@@ -17,7 +19,7 @@ data(nih_sample)
 tcm <- CreateTcm(doc_vec = nih_sample$ABSTRACT_TEXT,
                  skipgram_window = 10,
                  verbose = FALSE,
-                 cpus = 2)
+                 cpus = 1)
 
 # a TCM is generally larger than a DTM
 dim(tcm)
@@ -36,7 +38,7 @@ embeddings <- FitLdaModel(dtm = tcm,
                           calc_likelihood = FALSE,
                           calc_coherence = TRUE,
                           calc_r2 = TRUE,
-                          cpus = 2)
+                          cpus = 1)
 
 ## -----------------------------------------------------------------------------
 # Get an R-squared for general goodness of fit
@@ -62,13 +64,13 @@ embeddings$summary <- data.frame(topic = rownames(embeddings$phi),
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  embeddings$summary[ order(embeddings$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
+# embeddings$summary[ order(embeddings$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ]
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(embeddings$summary[ order(embeddings$summary$prevalence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of top 10 embedding dimensions")
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  embeddings$summary[ order(embeddings$summary$coherence, decreasing = TRUE) , ][ 1:10 , ]
+# embeddings$summary[ order(embeddings$summary$coherence, decreasing = TRUE) , ][ 1:10 , ]
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(embeddings$summary[ order(embeddings$summary$coherence, decreasing = TRUE) , ][ 1:10 , ], caption = "Summary of 10 most coherent embedding dimensions")
@@ -79,7 +81,7 @@ dtm_embed <- CreateDtm(doc_vec = nih_sample$ABSTRACT_TEXT,
                        doc_names = nih_sample$APPLICATION_ID,
                        ngram_window = c(1,1),
                        verbose = FALSE,
-                       cpus = 2)
+                       cpus = 1)
 
 dtm_embed <- dtm_embed[,colSums(dtm_embed) > 2]
 
@@ -92,7 +94,7 @@ embedding_assignments <- predict(embeddings, dtm_embed, method = "gibbs",
 embeddings$r2_dtm <- CalcTopicModelR2(dtm = dtm_embed, 
                                       phi = embeddings$phi[,colnames(dtm_embed)], # line up vocabulary
                                       theta = embedding_assignments,
-                                      cpus = 2)
+                                      cpus = 1)
 
 embeddings$r2_dtm
 

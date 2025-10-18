@@ -1,3 +1,20 @@
+# textmineR 3.0.6
+## Maintenance notice
+- `textmineR` is now in **maintenance-only** mode.  
+- Future development effort will focus on the successor package [`tidylda`](https://cran.r-project.org/package=tidylda).  
+- Bug fixes and CRAN compliance updates may continue as needed, but new features will not be added here.  
+- Users starting new projects are encouraged to adopt `tidylda`.
+
+## Updates
+This version is a patch where:
+
+* The C++11 requirement has been removed.
+* Package dependencies in vignettes have been handled more gracefully, to guard
+  against failure to build vignettes during CMD check.
+* Handled class checking with inherits() not if(class(object) == "class").
+* Fixed broken URLs in documentation.
+* Vignettes no longer rely on parallel processing.
+
 # textmineR 3.0.5
 This version is a patch. In this version I have
 

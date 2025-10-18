@@ -4,6 +4,7 @@ knitr::opts_chunk$set(
   comment = "#>", warning = FALSE
 )
 
+
 ## -----------------------------------------------------------------------------
 library(textmineR)
 
@@ -29,7 +30,7 @@ dtm <- CreateDtm(doc_vec = movie_review$review, # character vector of documents
                  remove_punctuation = TRUE, # punctuation - this is the default
                  remove_numbers = TRUE, # numbers - this is the default
                  verbose = FALSE, # Turn off status bar for this demo
-                 cpus = 2) # by default, this will be the max number of cpus available
+                 cpus = 1) # by default, this will be the max number of cpus available
 
 
 ## -----------------------------------------------------------------------------
@@ -46,7 +47,7 @@ head(colnames(dtm))
 knitr::kable(head(colnames(dtm)), col.names = "colnames(dtm)") # tokens
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(rownames(dtm))
+# head(rownames(dtm))
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(rownames(dtm)), col.names = "rownames(dtm)") # document IDs
@@ -61,9 +62,9 @@ str(tf_mat)
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  # look at the most frequent tokens
-#  head(tf_mat[ order(tf_mat$term_freq, decreasing = TRUE) , ], 10)
-#  
+# # look at the most frequent tokens
+# head(tf_mat[ order(tf_mat$term_freq, decreasing = TRUE) , ], 10)
+# 
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_mat[ order(tf_mat$term_freq, decreasing = TRUE) , ], 10),
@@ -76,7 +77,7 @@ tf_bigrams <- tf_mat[ stringr::str_detect(tf_mat$term, "_") , ]
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_bigrams[ order(tf_bigrams$term_freq, decreasing = TRUE) , ], 10)
+# head(tf_bigrams[ order(tf_bigrams$term_freq, decreasing = TRUE) , ], 10)
 
 ## ----echo = FALSE-------------------------------------------------------------
 
@@ -104,7 +105,7 @@ knitr::kable(head(tf_mat[ order(tf_mat$term_freq, decreasing = TRUE) , ], 10),
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_bigrams[ order(tf_bigrams$term_freq, decreasing = TRUE) , ], 10)
+# head(tf_bigrams[ order(tf_bigrams$term_freq, decreasing = TRUE) , ], 10)
 
 ## ----echo = FALSE-------------------------------------------------------------
 
@@ -132,15 +133,15 @@ tf_sentiment <- list(positive = TermDocFreq(dtm[ movie_review$sentiment == 1 , ]
                      negative = TermDocFreq(dtm[ movie_review$sentiment == 0 , ]))
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_sentiment$positive[ order(tf_sentiment$positive$term_freq, decreasing = TRUE) , ], 10)
-#  
+# head(tf_sentiment$positive[ order(tf_sentiment$positive$term_freq, decreasing = TRUE) , ], 10)
+# 
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_sentiment$positive[ order(tf_sentiment$positive$term_freq, decreasing = TRUE) , ], 10)
 , caption = "Ten most-frequent positive tokens")
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_sentiment$negative[ order(tf_sentiment$negative$term_freq, decreasing = TRUE) , ], 10)
+# head(tf_sentiment$negative[ order(tf_sentiment$negative$term_freq, decreasing = TRUE) , ], 10)
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_sentiment$negative[ order(tf_sentiment$negative$term_freq, decreasing = TRUE) , ], 10), caption = "Ten most-frequent negative tokens")
@@ -161,15 +162,15 @@ tf_sentiment$negative$conditional_prob <-
 tf_sentiment$negative$prob_lift <- tf_sentiment$negative$conditional_prob - p_words
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  # let's look again with new weights
-#  head(tf_sentiment$positive[ order(tf_sentiment$positive$prob_lift, decreasing = TRUE) , ], 10)
-#  
+# # let's look again with new weights
+# head(tf_sentiment$positive[ order(tf_sentiment$positive$prob_lift, decreasing = TRUE) , ], 10)
+# 
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_sentiment$positive[ order(tf_sentiment$positive$prob_lift, decreasing = TRUE) , ], 10), caption = "Reweighted: ten most relevant terms for positive sentiment")
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_sentiment$negative[ order(tf_sentiment$negative$prob_lift, decreasing = TRUE) , ], 10)
+# head(tf_sentiment$negative[ order(tf_sentiment$negative$prob_lift, decreasing = TRUE) , ], 10)
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_sentiment$negative[ order(tf_sentiment$negative$prob_lift, decreasing = TRUE) , ], 10), caption = "Reweighted: ten most relevant terms for negative sentiment")
@@ -182,14 +183,14 @@ tf_sentiment_bigram <- lapply(tf_sentiment, function(x){
 })
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_sentiment_bigram$positive, 10)
+# head(tf_sentiment_bigram$positive, 10)
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_sentiment_bigram$positive, 10),
              caption = "Reweighted: ten most relevant bigrams for positive sentiment")
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  head(tf_sentiment_bigram$negative, 10)
+# head(tf_sentiment_bigram$negative, 10)
 
 ## ----echo = FALSE-------------------------------------------------------------
 knitr::kable(head(tf_sentiment_bigram$negative, 10),
